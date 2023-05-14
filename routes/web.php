@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\WaitlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/success', function () {
+    return view('success');
+})->name('success');
+
+Route::post('/store_email',[WaitlistController::class, 'storeEmail'])->name('store_email');
+
