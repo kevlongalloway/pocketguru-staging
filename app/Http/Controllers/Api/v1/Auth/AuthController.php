@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
@@ -20,11 +21,23 @@ class AuthController extends Controller
     public function register(Request $request)
 {
     // Validate the incoming request data
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
-        'password' => 'required|string|min:8',
-    ]);
+    // $request->validate([
+    //     'name' => 'required|string|max:255',
+    //     'email' => 'required|string|email|max:255|unique:users',
+    //     'password' => 'required|string|min:8',
+    // ]);
+
+    $validator = Validator::make($request->all(), 
+	['name' => 'required|string|max:255',
+         'email' => 'required|string|email|max:255|unique:users',
+         'password' => 'required|string|min:8']);
+
+
+    if ($validator->fails()) {
+	return response()->json([
+	   'errors' => $validator->errors()
+	]);
+    }
     
     // Create the new user record
     $user = User::create([
