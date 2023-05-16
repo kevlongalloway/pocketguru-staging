@@ -5,13 +5,9 @@ namespace App\Http\Controllers\Api\v1\Auth;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Laravel\Sanctum\PersonalAccessToken;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -97,39 +93,5 @@ public function login(Request $request)
         'token_type' => 'Bearer',
     ]);
 }
-
-/**
- * Log out a user by revoking their Sanctum token.
- *
- * @param  string|null  $token  The Sanctum token to revoke.
- * @return void
- *
- * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
- * @throws \Illuminate\Validation\ValidationException
- */
-public function logout($token = null)
-{
-        if (!$token) {
-            return response()->json([
-                'error' => 'Token is required.',
-            ]);
-        }
-
-        $personalAccessToken = PersonalAccessToken::findToken($token);
-
-        if (!$personalAccessToken) {
-	    return response()->json([
-		'error' => 'Token not found.'
-	    ]);
-        }
-
-        $user = $personalAccessToken->tokenable;
-
-        // Revoke the current token
-        $personalAccessToken->delete();
-	return response()->json([
-	    'success' => true
-	]);
-    }
 
 }

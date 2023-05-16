@@ -34,8 +34,28 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
+	$this->renderable(function (Throwable $e) {
             //
+            return response(['error' => $e->getMessage()], $e->getCode() ?: 400);
         });
     }
+
+    /**
+     * Render an exception into an HTTP response.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Throwable  $exception
+     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response
+     */
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof RouteNotFoundException) {
+            // if ($request->expectsJson()) {
+                return response()->json(['error' => 'Route not found.'], Response::HTTP_NOT_FOUND);
+            // }
+        }
+
+        return parent::render($request, $exception);
+    }
+
 }

@@ -24,10 +24,3 @@ Route::get('/subscribed', function () {
 })->name('success');
 
 Route::post('/subscribe',[WaitlistController::class, 'storeEmail'])->name('store_email');
-
-Route::post('register', [AuthController::class, 'register']);
-
-Route::post('test', function () {
-	return response()->json(['message' => 'success']);
-
-});
