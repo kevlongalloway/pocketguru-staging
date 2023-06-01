@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\OAuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WaitlistController;
 use App\Http\Controllers\Api\v1\Auth\AuthController;
@@ -24,3 +25,13 @@ Route::get('/subscribed', function () {
 })->name('success');
 
 Route::post('/subscribe',[WaitlistController::class, 'storeEmail'])->name('store_email');
+
+
+// Google Authentication Routes
+Route::get('/auth/google', [OAuthController::class, 'redirectToGoogle'])->name('auth.google.redirect');
+Route::get('/auth/google/callback', [OAuthController::class, 'handleGoogleCallback'])->name('auth.google.callback');
+
+// Apple Authentication Routes
+Route::get('/auth/apple', [OAuthController::class, 'redirectToApple'])->name('auth.apple.redirect');
+Route::get('/auth/apple/callback', [OAuthController::class, 'handleAppleCallback'])->name('auth.apple.callback');
+
