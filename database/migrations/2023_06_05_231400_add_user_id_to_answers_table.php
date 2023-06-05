@@ -17,16 +17,4 @@ class AddUserIdToAnswersTable extends Migration
             $table->foreignId('user_id')->constrained('users');
         });
     }
-
-    /**
-     * Reverse the migrations.
-     *
-     * @return void
-     */
-    public function down()
-    {
-        Schema::table('answers', function (Blueprint $table) {
-            //
-        });
-    }
 }
