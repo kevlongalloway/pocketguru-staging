@@ -22,7 +22,7 @@ To enhance user experience and functionality, the Pocket Guru AI API Backend int
 
 ## Documentation and Usage
 
-For detailed documentation and instructions on using the API Backend, please refer to the [API Documentation](/docs) included in this repository. It provides an overview of the available endpoints, request/response formats, and authentication requirements.
+For detailed documentation and instructions on using the API Backend, please refer to the [API Documentation](./API_DOCUMENTATION.md) included in this repository. It provides an overview of the available endpoints, request/response formats, and authentication requirements.
 
 ## Testing
 
