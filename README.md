@@ -1,64 +1,48 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+# Pocket Guru AI API Backend
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+The Pocket Guru AI API Backend is the server-side component of the Pocket Guru AI mobile application. It serves as the central hub for handling various functionalities, including user authentication, data processing, and integration with external services. This repository contains the source code and configuration files for the API Backend.
 
-## About Laravel
+## Project Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Pocket Guru AI is an innovative mobile app that provides personalized mental health support and resources to users. The API Backend plays a critical role in delivering a seamless experience by powering key features such as:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Mental Health Therapist Chatbot**: The backend API integrates with ChatGPT API, enabling users to engage in conversational therapy sessions with an AI-powered mental health therapist. The chatbot utilizes natural language processing to understand user input, provide empathetic responses, and offer guidance for various mental health concerns.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Personalized Breathing Exercises**: The API Backend includes routes that deliver personalized breathing exercises to users. These exercises are designed to help users manage stress, anxiety, and improve overall well-being. The backend leverages algorithms to generate exercise recommendations based on user preferences and historical data.
 
-## Learning Laravel
+- **Personalized Guided Meditation**: The API Backend also offers routes for personalized guided meditation sessions. Users can access a library of meditation sessions tailored to their specific needs, such as mindfulness, relaxation, focus, or sleep. The backend utilizes machine learning algorithms to recommend meditation content based on user preferences and past usage patterns.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Integration and Authentication
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+To enhance user experience and functionality, the Pocket Guru AI API Backend integrates with the following services:
 
-## Laravel Sponsors
+- **Twilio**: The backend integrates with Twilio to handle SMS and voice communication. It allows users to receive notifications, reminders, and engage in voice interactions with the mental health chatbot.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- **Google and Apple OAuth**: The API Backend supports OAuth authentication, enabling users to log in using their Google or Apple accounts. This integration ensures a secure and seamless authentication process for users.
 
-### Premium Partners
+## Documentation and Usage
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+For detailed documentation and instructions on using the API Backend, please refer to the [API Documentation](/docs) included in this repository. It provides an overview of the available endpoints, request/response formats, and authentication requirements.
 
-## Contributing
+## Testing
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+To run the tests for the backend API, you can use the following command:
 
-## Code of Conduct
+```bash
+./vendor/bin/phpunit
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Contributors
 
-## Security Vulnerabilities
+Pocket Guru AI Backend API is developed and maintained by the following contributors:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- [Kevlon Galloway](https://github.com/kevlongalloway) - Software Engineer and System Architect
+
+We welcome and appreciate contributions from the community! If you're interested in contributing to the project, please follow the guidelines outlined in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is licensed under the Commercial Use License. To obtain a license for using this software for commercial purposes, please contact us at kevlongalloway1999m@gmail.com.
+
+The Commercial Use License allows individuals and organizations to utilize, modify, and distribute the Pocket Guru AI API Backend software for commercial purposes. This license grants the freedom to integrate the software, make modifications, and offer services while ensuring compliance with open-source principles. By obtaining a Commercial Use License, users gain the rights to leverage the power of the Pocket Guru AI API Backend in their commercial endeavors.
+
+You can view the license [here](./COMMERCIAL_USE_LICENSE).
