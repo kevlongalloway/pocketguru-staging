@@ -41,4 +41,18 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Get the answers associated with the user.
+     *
+     * This function defines a one-to-many relationship between the User model
+     * and the Answer model. It returns a collection of Answer models that
+     * are associated with the user.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+    */
+    public function answers()
+    {
+        return $this->hasMany(Answer::class);
+    }
 }
