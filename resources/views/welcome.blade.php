@@ -35,7 +35,7 @@ for: https://web3templates.com
               <form class="sm:mx-auto sm:max-w-xl lg:mx-0" action="{{  route('store_email') }}" method="post">
                   @csrf
 		  <div class="sm:flex">
-                  <div class="min-w-0 flex-1"><label for="email" class="sr-only">Email address</label><input id="email" name="email" type="email" placeholder="Enter your email" class="block w-full rounded-md border-0 bg-gray-200 px-4 py-3 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400" value="" autocomplete="off" /></div>
+                  <div class="min-w-0 flex-1"><label for="email" class="sr-only">Email address</label><input id="email" name="email" type="email" placeholder="Enter your email" class="block w-full rounded-md border-0 bg-gray-200 px-4 py-3 text-base text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-400" value="" autocomplete="off" required /></div>
                   <div class="mt-3 sm:mt-0 sm:ml-3"><button type="submit" class="block w-full rounded-md bg-pink-500 py-3 px-4 font-medium text-white shadow hover:bg-pink-400 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2 focus:ring-offset-gray-900">Join Waitlist</button></div>
                 </div>
               </form>

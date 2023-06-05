@@ -24,7 +24,7 @@ Route::get('/subscribed', function () {
     return view('success');
 })->name('success');
 
-Route::post('/subscribe',[WaitlistController::class, 'storeEmail'])->name('store_email');
+Route::post('/subscribe',[WaitlistController::class, 'storeEmail'])->name('store_email')->middleware('throttle:3');
 
 
 // Google Authentication Routes
