@@ -3,7 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\v1\Auth\AuthController;
-use App\Http\Controllers\ChatGptController;
+use App\Http\Controllers\Api\v1\Auth\OAuthController;
+use App\Http\Controllers\Api\v1\ChatGpt\ChatGptController;
 
 
 /*
