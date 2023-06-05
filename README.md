@@ -30,14 +30,13 @@ To run the tests for the backend API, you can use the following command:
 
 ```bash
 ./vendor/bin/phpunit
+```
 
 ## Contributors
 
 Pocket Guru AI Backend API is developed and maintained by the following contributors:
 
 - [Kevlon Galloway](https://github.com/kevlongalloway) - Software Engineer and System Architect
-
-We welcome and appreciate contributions from the community! If you're interested in contributing to the project, please follow the guidelines outlined in [CONTRIBUTING.md](./CONTRIBUTING.md).
 
 ## License
 
