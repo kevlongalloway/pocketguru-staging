@@ -40,7 +40,7 @@ Pocket Guru AI Backend API is developed and maintained by the following contribu
 
 ## License
 
-This project is licensed under the Commercial Use License. To obtain a license for using this software for commercial purposes, please contact us at kevlongalloway1999m@gmail.com.
+This project is licensed under the Commercial Use License. To obtain a license for using this software for commercial purposes, please contact me at kevlongalloway1999m@gmail.com.
 
 The Commercial Use License allows individuals and organizations to utilize, modify, and distribute the Pocket Guru AI API Backend software for commercial purposes. This license grants the freedom to integrate the software, make modifications, and offer services while ensuring compliance with open-source principles. By obtaining a Commercial Use License, users gain the rights to leverage the power of the Pocket Guru AI API Backend in their commercial endeavors.
 
