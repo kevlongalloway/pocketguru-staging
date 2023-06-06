@@ -32,7 +32,7 @@ class ChatGptController extends Controller
         );
 
         // Load system messages from file
-        // $systemMessagesFilePath = storage_path("app/system_messages.txt");
+        $systemMessagesFilePath = storage_path("app/system_messages.txt");
         // $this->systemMessages = file(
         //     $systemMessagesFilePath,
         //     FILE_IGNORE_NEW_LINES
