@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies and build
         run: |
-          cd /path/to/laravel/project
+          cd /var/www/html/pocketguru
           composer install --no-dev --prefer-dist --no-interaction --quiet
           npm install
           npm run production
@@ -42,7 +42,7 @@ jobs:
             cd /var/www/html/pocketguru # Change to your project's directory
             cp .env.example .env # Copy the example environment file
             php artisan key:generate # Generate application key
-            php artisan migrate --force # Run database migrations
+            php artisan migrate:fresh --force # Run database migrations
             php artisan config:cache # Cache configuration
             php artisan route:cache # Cache routes
 
