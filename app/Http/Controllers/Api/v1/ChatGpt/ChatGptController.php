@@ -264,8 +264,8 @@ class ChatGptController extends Controller
     {
         // Define an array of system messages for positive affirmations
         $systemMessages = [
-            "Please provide positive affirmations for the user.",
-            "Generate positive affirmations to uplift the user.",
+            "Please provide  a positive affirmationfor the user.",
+            "Generate a positive affirmation to uplift the user.",
             "Deliver inspiring messages of self-belief and positivity.",
             // Add more system messages as needed
         ];
@@ -284,10 +284,8 @@ class ChatGptController extends Controller
     {
         $userAttributes = $this->getUserAttributes(); // Get user attributes specific to breathing exercises
 
-        //    $systemMessage = $this->getRandomSystemMessageForBreathingExercises();
-        $systemMessage =
-            "Engage in deep breathing exercises to center yourself and find inner calm.";
-
+        $systemMessage = $this->getRandomSystemMessageForBreathingExercises();
+      
         $assistantReply = $this->getAssistantReply(
             $systemMessage,
             json_encode($userAttributes)
@@ -305,8 +303,7 @@ class ChatGptController extends Controller
     {
         // Define an array of system messages for breathing exercises
         $systemMessages = [
-            "Engage in deep breathing exercises to center yourself and find inner calm.",
-            "Take a moment to focus on your breath and practice mindful breathing.",
+            "Generate a breathing exercise for the user",
         ];
 
         $randomIndex = array_rand($systemMessages);
