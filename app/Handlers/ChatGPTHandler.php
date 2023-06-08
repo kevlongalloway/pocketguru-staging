@@ -9,11 +9,22 @@ class ChatGPTHandler {
     private $maxTokens = 4096;
     private $apiKey;
 
+    /**
+     * Create a new ChatGPTHandler instance.
+     */
     public function __construct()
     {
         $this->apiKey = env('OPENAI_API_KEY');
     }
 
+
+    /**
+     * Make a text completion request to the OpenAI API.
+     *
+     * @param  string  $prompt
+     * @param  int  $maxTokens
+     * @return string|null
+     */
     public function makeTextCompletionRequest($prompt, $maxTokens)
     {
         // Set the API endpoint URL
@@ -45,13 +56,22 @@ class ChatGPTHandler {
         if ($response->getStatusCode() === 200) {
             // Extract the generated text from the API response
             $responseData = json_decode($response->getBody(), true);
-            return $responseData['choices'][0]['text'];
+            return ['response' => $responseData['choices'][0]['text']];
         }
 
         // Handle error response
         return null;
     }
 
+
+     /**
+     * Make a chat completion request to the OpenAI API.
+     *
+     * @param  string  $message
+     * @param  array  $chatHistory
+     * @param  string|null  $systemMessage
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function makeChatCompletionRequest($message, $chatHistory = [], $systemMessage = null)
     {
         $client = new Client();

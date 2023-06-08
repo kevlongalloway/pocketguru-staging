@@ -5,10 +5,30 @@ namespace App\Http\Controllers\Api\v1\ChatGpt;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use App\Handlers\ChatGPTHandler;
 
 class TextCompletionController {
 
-	public function provideBreathingExercises() {
+	private $openaiClient;
+
+	/**
+	 * Create a new instance of the controller.
+	 *
+	 * This function initializes the OpenAI client by creating a new instance of the ChatGPTHandler class.
+	 * The OpenAI client will be used to interact with the OpenAI API for chat-based language processing.
+	 * It allows the controller to make requests to generate responses using the ChatGPT model.
+	 */
+    public function __construct()
+    {
+        $this->openaiClient = new ChatGPTHandler;
+    }
+
+    /**
+     * Provide a breathing exercise to the user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+	public function provideBreathingExercise() {
 		$systemMessage = 'You are a meditation guide providing a soothing guided meditation session. Your goal is to help the user relax and find inner peace by focusing on deep breathing. You should instruct the user to take deep breaths, emphasizing the inhalation and exhalation process. The output of your guidance will be converted into speech by a Text-to-Speech bot and played to the user in a calm and soothing manner. Remember to include instructions such as "breathe in" and "breathe out," as well as specific guidance on how to breathe deeply, hold the breath, and exhale slowly. Encourage the user to repeat the breathing cycle as many times as needed for relaxation and stress relief.
 
 			Instructions:
@@ -22,10 +42,14 @@ class TextCompletionController {
 			"Hold the empty breath for a count of two, observing the tranquility that arises in the absence of breath."
 			Start over like we never started';
 
-		return $this->makeTextCompletionRequest($systemMessage, 300);
+		return response()->json($this->openaiClient->makeTextCompletionRequest($systemMessage, 300));
 	}
 
-
+	/**
+     * Provide a positive affirmation to the user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
 	public function providePositiveAffirmation() {
 		$systemMessage = 'You are a meditation guide providing a soothing guided meditation session. Your goal is to help the user relax and find inner peace by focusing on deep breathing. You should instruct the user to take deep breaths, emphasizing the inhalation and exhalation process. The output of your guidance will be converted into speech by a Text-to-Speech bot and played to the user in a calm and soothing manner. Remember to include instructions such as "breathe in" and "breathe out," as well as specific guidance on how to breathe deeply, hold the breath, and exhale slowly. Encourage the user to repeat the breathing cycle as many times as needed for relaxation and stress relief.
 
@@ -40,9 +64,14 @@ class TextCompletionController {
 			"Hold the empty breath for a count of two, observing the tranquility that arises in the absence of breath."
 			Start over like we never started';
 
-		return $this->makeTextCompletionRequest($systemMessage, 300);
+		return response()->json($this->openaiClient->makeTextCompletionRequest($systemMessage, 300));
 	}
 
+	/**
+     * Provide a guided meditation to the user.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
 	public function provideGuidedMeditation() {
 		$systemMessage = 'You are a meditation guide providing a soothing guided meditation session. Your goal is to help the user relax and find inner peace by focusing on deep breathing. You should instruct the user to take deep breaths, emphasizing the inhalation and exhalation process. The output of your guidance will be converted into speech by a Text-to-Speech bot and played to the user in a calm and soothing manner. Remember to include instructions such as "breathe in" and "breathe out," as well as specific guidance on how to breathe deeply, hold the breath, and exhale slowly. Encourage the user to repeat the breathing cycle as many times as needed for relaxation and stress relief.
 
@@ -57,33 +86,7 @@ class TextCompletionController {
 			"Hold the empty breath for a count of two, observing the tranquility that arises in the absence of breath."
 			Start over like we never started';
 
-		return $this->makeTextCompletionRequest($systemMessage, 300);
-	}
-
-
-	private function makeTextCompletionRequest($prompt, $maxTokens) {
-	    $apiKey = env('OPENAI_API_KEY');
-	    $url = 'https://api.openai.com/v1/completions';
-
-	    $headers = [
-	        'Authorization' => 'Bearer ' . $apiKey,
-	        'Content-Type' => 'application/json',
-	    ];
-
-	    $data = [
-	        'model' => 'text-davinci-003',
-	        'prompt' => $prompt,
-	        'max_tokens' => $maxTokens,
-	    ];
-
-	    $response = Http::withHeaders($headers)->post($url, $data);
-
-	    if ($response->successful()) {
-	        return $response->json('choices.0.text');
-	    }
-
-	    // Handle error response
-	    return null;
+		return response()->json($this->openaiClient->makeTextCompletionRequest($systemMessage, 300));
 	}
 
 
