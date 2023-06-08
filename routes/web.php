@@ -3,7 +3,7 @@
 use App\Http\Controllers\OAuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WaitlistController;
-use App\Http\Controllers\Api\v1\Auth\AuthController;
+use App\Http\Controllers\Api\v1\Auth\OAuthController;
 
 /*
 |--------------------------------------------------------------------------

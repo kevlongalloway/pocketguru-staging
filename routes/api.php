@@ -2,9 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\v1\Auth\AuthController;
+use App\Http\Controllers\Api\V1\Auth\AuthController;
 use App\Http\Controllers\Api\v1\Auth\OAuthController;
-use App\Http\Controllers\Api\v1\ChatGpt\ChatGptController;
+use App\Http\Controllers\Api\v1\ChatGpt\TextCompletionController;
+use App\Http\Controllers\Api\v1\ChatGpt\ChatCompletionController;
 
 
 /*
@@ -26,9 +27,9 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout/{token}', [AuthController::class, 'logout']);
 
-Route::post('/chat', [ChatGptController::class, 'chat2'])->middleware('auth:sanctum');
-Route::post('/guided-meditation', [ChatGptController::class, 'guidedMeditation'])->middleware('auth:sanctum');
-Route::post('/positive-affirmation', [ChatGptController::class, 'providePositiveAffirmations'])->middleware('auth:sanctum');
-Route::post('/breathing-exercise', [ChatGptController::class, 'provideBreathingExercises'])->middleware('auth:sanctum');
-Route::get('/reset-conversation', [ChatGptController::class, 'resetHistory'])->middleware('auth:sanctum');
+Route::post('/chat', [ChatCompletionController::class, 'chat'])->middleware('auth:sanctum');
+Route::post('/guided-meditation', [TextCompletionController::class, 'provideGuidedMeditation'])->middleware('auth:sanctum');
+Route::post('/positive-affirmation', [TextCompletionController::class, 'providePositiveAffirmation'])->middleware('auth:sanctum');
+Route::post('/breathing-exercise', [TextCompletionController::class, 'provideBreathingExercise'])->middleware('auth:sanctum');
+Route::get('/reset-conversation', [ChatCompletionController::class, 'resetHistory'])->middleware('auth:sanctum');
 
