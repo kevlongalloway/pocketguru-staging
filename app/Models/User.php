@@ -55,4 +55,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Answer::class);
     }
+
+    /**
+     * Get the user's subscription tier.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function subscriptionTier()
+    {
+        return $this->hasOne(SubscriptionTier::class);
+    }
 }
