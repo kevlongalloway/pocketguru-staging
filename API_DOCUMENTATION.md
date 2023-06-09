@@ -90,6 +90,37 @@ All API routes, except for `/register` and `/login`, require authentication usin
 - **Response:**
   - `message`: "Conversation history has been reset."
 
+
+## Store User Answers
+
+Store the user's answers to multiple-choice and content-based questions.
+
+**URL:** `/api/v1/answers`
+
+**Method:** `POST`
+
+### Request Body
+
+The request body should be a JSON object with the following structure:
+
+```json
+{
+    "answers": [
+        {
+            "question_id": 1,
+            "answer_type": 1,
+            "option_id": 1
+        },
+        {
+            "question_id": 2,
+            "answer_type": 2,
+            "content": "Some answer content"
+        },
+        // Add more answer objects for other questions
+    ]
+}
+
+
 ## Response Format
 
 The API responses follow the JSON format and include the following properties:

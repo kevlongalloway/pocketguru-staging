@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\v1\Auth\AuthController;
 use App\Http\Controllers\Api\v1\ChatGpt\TextCompletionController;
 use App\Http\Controllers\Api\v1\ChatGpt\ChatCompletionController;
 use App\Http\Controllers\Api\v1\QuestionController;
+use App\Http\Controllers\Api\v1\AnswerController;
 
 
 /*
@@ -33,4 +34,6 @@ Route::post('/positive-affirmation', [TextCompletionController::class, 'provideP
 Route::post('/breathing-exercise', [TextCompletionController::class, 'provideBreathingExercise'])->middleware('auth:sanctum');
 Route::get('/reset-conversation', [ChatCompletionController::class, 'resetHistory'])->middleware('auth:sanctum');
 Route::get('questionaire-completed', [QuestionController::class, 'checkQuestionaireCompleted'])->middleware('auth:sanctum');
+
+Route::post('/v1/answers', [AnswerController::class, 'storeUserAnswers'])->middleware('auth:sanctum');
 
