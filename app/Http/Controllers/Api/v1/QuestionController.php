@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Question;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QuestionController extends Controller
 {
@@ -82,5 +83,12 @@ class QuestionController extends Controller
     public function destroy(Question $question)
     {
         //
+    }
+
+    public function checkQuestionaireCompleted()
+    {
+        return response()->json([
+            'completed' => Auth::user()->questionaireCompleted()
+        ]);
     }
 }

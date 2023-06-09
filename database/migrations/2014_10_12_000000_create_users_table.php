@@ -18,6 +18,8 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->integer('subscription_tier_id')->default(1);
+            $table->boolean('is_admin')->default(0);
+            $table->boolean('questionaire_completed')->default(0);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

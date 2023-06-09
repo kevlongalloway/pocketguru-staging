@@ -65,4 +65,24 @@ class User extends Authenticatable
     {
         return $this->hasOne(SubscriptionTier::class);
     }
+
+    /**
+     * Check if the user is an admin.
+     *
+     * @return bool
+     */
+    public function isAdmin()
+    {
+        return $this->is_admin;
+    }
+
+    /**
+     * Check if the user completed questionaire.
+     *
+     * @return bool
+     */
+    public function questionaireCompleted()
+    {
+        return $this->questionaire_completed;
+    }
 }
