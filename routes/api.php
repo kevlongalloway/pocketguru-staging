@@ -37,3 +37,5 @@ Route::get('questionaire-completed', [QuestionController::class, 'checkQuestiona
 
 Route::post('/v1/answers', [AnswerController::class, 'storeUserAnswers'])->middleware('auth:sanctum');
 
+Route::get('/questions', [QuestionController::class, 'index']);
+

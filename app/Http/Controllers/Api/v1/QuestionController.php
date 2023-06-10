@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Controller;
 use App\Models\Question;
+use App\Models\Option;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,25 @@ class QuestionController extends Controller
      */
     public function index()
     {
-        //
+        $questions = Question::all();
+
+        $result = [];
+
+        foreach ($questions as $question) {
+            $data = [
+                'question' => $question->question,
+                'question_type' => $question->question_type,
+            ];
+
+            if ($question->question_type == 1) {
+                $options = Option::where('question_id', $question->id)->get();
+                $data['options'] = $options;
+            }
+
+            $result[] = $data;
+        }
+
+        return $result;
     }
 
     /**
