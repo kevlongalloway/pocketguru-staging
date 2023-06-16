@@ -23,6 +23,7 @@ class QuestionController extends Controller
 
         foreach ($questions as $question) {
             $data = [
+                'id' => $question->id,
                 'question' => $question->question,
                 'question_type' => $question->question_type,
             ];
