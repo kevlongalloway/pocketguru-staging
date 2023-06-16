@@ -28,6 +28,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout/{token}', [AuthController::class, 'logout']);
 
+Route::get('/chat', [ChatCompletionController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/chat', [ChatCompletionController::class, 'chat'])->middleware('auth:sanctum');
 Route::post('/guided-meditation', [TextCompletionController::class, 'provideGuidedMeditation'])->middleware('auth:sanctum');
 Route::post('/positive-affirmation', [TextCompletionController::class, 'providePositiveAffirmation'])->middleware('auth:sanctum');

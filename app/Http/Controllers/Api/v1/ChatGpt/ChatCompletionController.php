@@ -82,6 +82,11 @@ class ChatCompletionController extends Controller
 	    ], Response::HTTP_OK);
 	}
 
+	public function index() 
+	{
+		return response()->json(Auth::user()->conversation_history);
+	}
+
 	/**
 	 * Find the system message from the conversation history.
 	 *
