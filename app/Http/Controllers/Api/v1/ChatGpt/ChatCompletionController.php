@@ -68,8 +68,9 @@ class ChatCompletionController extends Controller
 	    $assistantReply = $response->original['response'];
 
 	    // Append the user's message and the response to the conversation history
-	    $this->appendChatToHistory($conversationHistory, "assistant", $assistantReply);
+	    
 	    $this->appendChatToHistory($conversationHistory, "user", $message);
+	    $this->appendChatToHistory($conversationHistory, "assistant", $assistantReply);
 
 	    // Save the updated conversation history to the user model
 	    $user->conversation_history = json_encode($conversationHistory);
