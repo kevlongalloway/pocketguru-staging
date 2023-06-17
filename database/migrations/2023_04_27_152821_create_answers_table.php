@@ -19,7 +19,7 @@ class CreateAnswersTable extends Migration
             $table->text('content')->nullable();
             $table->foreignId('question_id')->constrained('questions')->nullable();
             $table->foreignId('user_id')->constrained('users')->nullable();
-            $table->foreignId('option_id')->constrained('options')->nullable();
+            $table->integer('option_id')->nullable();
             $table->timestamps();
         });
     }
