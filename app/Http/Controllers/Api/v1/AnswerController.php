@@ -23,9 +23,10 @@ class AnswerController extends Controller {
             'answers' => 'required|array',
             'answers.*.question_id' => 'required|integer',
             'answers.*.question_type' => 'required|integer',
-            'answers.*.option_id' => 'nullable|required_if:answers.*.question_type,1|integer',
-            'answers.*.content' => 'nullable|required_if:answers.*.question_type,2|string',
+            'answers.*.option_id' => 'nullable|required_if:question_type,1|integer',
+            'answers.*.content' => 'nullable|required_if:question_type,2|string',
         ]);
+
 
         $user = Auth::user();
 
