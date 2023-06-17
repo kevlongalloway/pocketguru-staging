@@ -35,8 +35,10 @@ class AnswerController extends Controller {
             ]);
 
             if ($answerData['question_type'] === 1) {
+                $answer->answer_type = 1;
                 $answer->option_id = $answerData['option_id'];
             } elseif ($answerData['question_type'] === 2) {
+                $answer->answer_type = 2;
                 $answer->content = $answerData['content'];
             }
 
