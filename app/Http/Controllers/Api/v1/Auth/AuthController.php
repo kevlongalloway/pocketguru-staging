@@ -99,6 +99,26 @@ public function login(Request $request)
 }
 
 /**
+ * Check if the user is authenticated.
+ *
+ * This endpoint can be used to verify if the user is authenticated using a Sanctum token.
+ *
+ * @return \Illuminate\Http\JsonResponse
+ */
+public function checkAuthentication(Request $request)
+{
+    if (isAuthenticated($request)) {
+        // User is authenticated using a Sanctum token
+        // Your logic for the protected endpoint
+        return response()->json(['message' => 'You are authenticated'], 200);
+    } else {
+        return response()->json(['message' => 'Unauthorized'], 401);
+    }
+}
+
+
+
+/**
  * Log out a user by revoking their Sanctum token.
  *
  * @param  string|null  $token  The Sanctum token to revoke.

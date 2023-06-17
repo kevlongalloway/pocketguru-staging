@@ -27,6 +27,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout/{token}', [AuthController::class, 'logout']);
+Route::middleware('auth:sanctum')->group(function () {
+Route::get('/check-authentication', [AuthController::class, 'checkAuthentication']);
 
 Route::get('/chat', [ChatCompletionController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/chat', [ChatCompletionController::class, 'chat'])->middleware('auth:sanctum');
