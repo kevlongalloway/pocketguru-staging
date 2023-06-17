@@ -85,4 +85,15 @@ class User extends Authenticatable
     {
         return $this->questionaire_completed;
     }
+
+    /**
+     * Check if the user completed questionaire.
+     *
+     * @return bool
+     */
+    public function questionaireIsCompleted()
+    {
+        $this->questionaire_completed = true;
+        $this->save();
+    }
 }

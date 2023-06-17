@@ -46,7 +46,7 @@ class AnswerController extends Controller
 
             return $answer;
         });
-
+        $user->questionaireIsCompleted();
         $user->answers()->saveMany($answers);
 
         return response()->json(['success' => true]);
