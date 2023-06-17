@@ -20,10 +20,10 @@ class AnswerController extends Controller {
 	public function storeUserAnswers(Request $request)
     {
         $validatedData = $request->validate([
-            'answers' => 'required|array',
+            'answers' => 'required',
             'answers.*.question_id' => 'required|integer',
             'answers.*.question_type' => 'required|integer',
-            'answers.*.option_id' => 'nullable|required_if:question_type,1|integer',
+            'answers.*.option_id' => 'nullable|required_if:question_type,1',
             'answers.*.content' => 'nullable|required_if:question_type,2|string',
         ]);
 
