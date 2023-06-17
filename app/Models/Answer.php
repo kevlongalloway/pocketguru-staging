@@ -12,6 +12,15 @@ class Answer extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'question_id',
+    ];
+
 
     /**
      * Get the user associated with the answer.
