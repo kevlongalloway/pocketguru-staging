@@ -107,6 +107,7 @@ public function login(Request $request)
  */
 public function checkAuthentication(Request $request)
 {
+    return Auth::check();
     if (Auth::user()) {
         // User is authenticated using a Sanctum token
         // Your logic for the protected endpoint
