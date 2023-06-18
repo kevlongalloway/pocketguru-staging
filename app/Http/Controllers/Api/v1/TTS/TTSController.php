@@ -5,19 +5,14 @@ namespace App\Http\Controllers\Api\v1\TTS;
 use App\Handlers\TTSHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 
 class TTSController extends Controller {
 	private $ttsHandler;
 
 	public function __construct() {
-		$jsonFilePath = storage_path('pg-tts-390208.json');
-		$jsonFileContents = File::get($jsonFilePath);
-		$json = json_decode($jsonFileContents, true);
 
-		$apiKey = $json['private_key'];
-		$cleanedPrivateKey = trim(str_replace(["\r", "\n"], '', $apiKey));
-		$this->ttsHandler = new TTSHandler($cleanedPrivateKey);
+		$apiKey = env('GOOGLE_CLOUD_PRIVATE_KEY');
+		$this->ttsHandler = new TTSHandler($apiKey);
 	}
 
 	public function synthesize(Request $request) {
