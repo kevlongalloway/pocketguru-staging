@@ -1,13 +1,13 @@
 <?php
 
+use App\Http\Controllers\Api\v1\AnswerController;
+use App\Http\Controllers\Api\v1\Auth\AuthController;
+use App\Http\Controllers\Api\v1\ChatGpt\ChatCompletionController;
+use App\Http\Controllers\Api\v1\ChatGpt\TextCompletionController;
+use App\Http\Controllers\Api\v1\QuestionController;
+use App\Http\Controllers\Api\v1\TTS\TTSController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\v1\Auth\AuthController;
-use App\Http\Controllers\Api\v1\ChatGpt\TextCompletionController;
-use App\Http\Controllers\Api\v1\ChatGpt\ChatCompletionController;
-use App\Http\Controllers\Api\v1\QuestionController;
-use App\Http\Controllers\Api\v1\AnswerController;
-
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +18,10 @@ use App\Http\Controllers\Api\v1\AnswerController;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
-*/
+ */
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+	return $request->user();
 });
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -41,3 +41,4 @@ Route::post('/v1/answers', [AnswerController::class, 'storeUserAnswers'])->middl
 
 Route::get('/questions', [QuestionController::class, 'index']);
 
+Route::post('/tts', [TTSController::class, 'synthesize']);
