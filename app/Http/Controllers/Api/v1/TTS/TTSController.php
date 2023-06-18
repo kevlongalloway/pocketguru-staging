@@ -16,6 +16,7 @@ class TTSController extends Controller {
 		$json = json_decode($jsonFileContents, true);
 
 		$apiKey = $json['private_key'];
+		dd($apiKey);
 		$this->ttsHandler = new TTSHandler($apiKey);
 	}
 
