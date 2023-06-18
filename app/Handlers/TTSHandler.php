@@ -38,7 +38,7 @@ class TTSHandler {
 
 		// Set the request headers
 		$headers = [
-			'Content-Type' => 'application/json',
+			'Content-Type' => 'application/x-www-form-urlencoded',
 			'Authorization' => 'Bearer ' . $this->apiKey,
 		];
 
