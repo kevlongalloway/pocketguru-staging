@@ -16,7 +16,8 @@ class TTSController extends Controller {
 		$json = json_decode($jsonFileContents, true);
 
 		$apiKey = $json['private_key'];
-		$this->ttsHandler = new TTSHandler((string) $apiKey);
+		$cleanedPrivateKey = trim(str_replace(["\r", "\n"], '', $apiKey));
+		$ttsHandler = new TTSHandler($cleanedPrivateKey);
 	}
 
 	public function synthesize(Request $request) {
