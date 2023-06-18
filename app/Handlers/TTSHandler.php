@@ -31,7 +31,7 @@ class TTSHandler {
 		];
 
 		// Create the parent URL using the format and variables
-		$parentUrl = sprintf($this->parentFormat, $project, $location);
+		$parentUrl = sprintf($this->parentUrl, $project, $location);
 
 		// Set the request URL
 		$url = "https://texttospeech.googleapis.com/v1beta1/" . $parentUrl . ":synthesizeLongAudio";
