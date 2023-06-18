@@ -33,6 +33,6 @@ class TTSController extends Controller {
 		$response = $this->ttsHandler->synthesizeAudio($input, $voiceName, $ssml, $outputFormat, $sampleRate);
 
 		// Return the API response as-is or modify it as needed
-		return response()->json($response);
+		return $response;
 	}
 }
