@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\TTS;
 use App\Handlers\TTSHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class TTSController extends Controller {
 	private $ttsHandler;
