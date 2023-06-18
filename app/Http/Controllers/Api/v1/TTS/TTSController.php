@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class TTSController extends Controller {
 	private $ttsHandler;
 
-	public function __construct(TTSHandler $ttsHandler) {
+	public function __construct() {
 		$jsonFilePath = storage_path('pg-tts-390208.json');
 		$jsonFileContents = File::get($jsonFilePath);
 		$json = json_decode($jsonFileContents, true);
