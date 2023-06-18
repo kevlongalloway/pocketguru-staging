@@ -10,10 +10,12 @@ class TTSHandler {
 
 	public function __construct($apiKey) {
 		$this->apiKey = $apiKey;
-		$this->parentUrl = env('TTS_PARENT_URL'); // Fetch the parent URL from the environment variable
+		$this->parentUrl = env('TTS_PARENT_URL', 'projects/%s/locations/%s'); // Fetch the parent URL from the environment variable
 	}
 
 	public function synthesizeAudio($input, $voiceName, $ssml = false, $outputFormat = 'MP3', $sampleRate = 48000) {
+		$project = env('TTS_PROJECT');
+		$location = env('TTS_LOCATION');
 		// Prepare the request body
 		$requestBody = [
 			'input' => [
@@ -28,8 +30,11 @@ class TTSHandler {
 			],
 		];
 
+		// Create the parent URL using the format and variables
+		$parentUrl = sprintf($this->parentFormat, $project, $location);
+
 		// Set the request URL
-		$url = $this->parentUrl;
+		$url = "https://texttospeech.googleapis.com/v1beta1/" . $parentUrl . ":synthesizeLongAudio";
 
 		// Set the request headers
 		$headers = [
