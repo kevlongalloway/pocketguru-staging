@@ -78,7 +78,7 @@ class TTSHandler {
 		];
 
 		// Send the POST request
-		$response = Http::withHeaders($headers)->post($url, $requestBody);
+		$response = Http::withHeaders($headers)->post($url, json_encode($requestBody));
 
 		return $response;
 	}

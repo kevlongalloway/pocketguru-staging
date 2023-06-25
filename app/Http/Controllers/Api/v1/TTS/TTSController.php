@@ -9,10 +9,8 @@ use Illuminate\Http\Request;
 class TTSController extends Controller {
 	private $ttsHandler;
 
-	public function __construct() {
-
-		$apiKey = env('GOOGLE_CLOUD_PRIVATE_KEY');
-		$this->ttsHandler = new TTSHandler($apiKey);
+	public function __construct($ttsHandler TTSHandler) {
+		$this->ttsHandler = $ttsHandler;
 	}
 
 	public function synthesize(Request $request) {
