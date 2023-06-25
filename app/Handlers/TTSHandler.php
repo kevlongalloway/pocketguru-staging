@@ -9,7 +9,7 @@ class TTSHandler {
 	private $parentUrl;
 
 	public function __construct() {
-		$this->apiKey = $this->getApiKey();
+		$this->apiKey = $this->getAccessToken();
 		$this->parentUrl = env('TTS_PARENT_URL', 'projects/%s/locations/%s'); // Fetch the parent URL from the environment variable
 	}
 
