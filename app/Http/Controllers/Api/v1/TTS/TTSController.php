@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class TTSController extends Controller {
 	private $ttsHandler;
 
-	public function __construct($ttsHandler TTSHandler) {
+	public function __construct(TTSHandler $ttsHandler) {
 		$this->ttsHandler = $ttsHandler;
 	}
 
