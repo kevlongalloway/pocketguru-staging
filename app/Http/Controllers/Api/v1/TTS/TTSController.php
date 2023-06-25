@@ -16,7 +16,7 @@ class TTSController extends Controller {
 
 	public function synthesize(Request $request) {
 		$input = $request->input('input');
-		$voiceName = $request->input('en-US-Standard-H');
+		$voiceName = $request->input('en-US-Standard-I');
 		$ssml = $request->input('ssml', false);
 		$outputFormat = $request->input('output_format', 'MP3');
 		$sampleRate = $request->input('sample_rate', 48000);
