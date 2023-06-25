@@ -72,6 +72,9 @@ class TTSHandler {
 
 		$textToSpeechClient->close();
 
-		return $audioContent;
+		return Response::make($audioContent, 200, [
+			'Content-Type' => 'audio/mpeg',
+			'Content-Disposition' => 'inline; filename="audio.mp3"',
+		]);
 	}
 }
