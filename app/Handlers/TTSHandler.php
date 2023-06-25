@@ -8,9 +8,21 @@ class TTSHandler {
 	private $apiKey;
 	private $parentUrl;
 
-	public function __construct($apiKey) {
-		$this->apiKey = $apiKey;
+	public function __construct() {
+		$this->apiKey = $this->getApiKey();
 		$this->parentUrl = env('TTS_PARENT_URL', 'projects/%s/locations/%s'); // Fetch the parent URL from the environment variable
+	}
+
+	private function getApiKey() {
+		$keyFilePath = storage_path('pg-tts-390208.json');
+
+		if (file_exists($keyFilePath)) {
+			$jsonKey = file_get_contents($keyFilePath);
+			$keyData = json_decode($jsonKey, true);
+			return $keyData['private_key'];
+		} else {
+			throw new \Exception('API key file not found.');
+		}
 	}
 
 	public function synthesizeAudio($input, $voiceName, $ssml = false, $outputFormat = 'MP3', $sampleRate = 48000) {
