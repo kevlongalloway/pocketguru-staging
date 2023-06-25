@@ -13,39 +13,40 @@ class TTSHandler {
 		$this->parentUrl = env('TTS_PARENT_URL', 'projects/%s/locations/%s'); // Fetch the parent URL from the environment variable
 	}
 
-    private function getAccessToken() {
-    $keyFilePath = storage_path('pg-tts-390208.json');
+	private function getAccessToken() {
+		$keyFilePath = storage_path('pg-tts-390208.json');
 
-    if (file_exists($keyFilePath)) {
-        $jsonKey = file_get_contents($keyFilePath);
-        $keyData = json_decode($jsonKey, true);
-        $privateKey = $keyData['private_key'];
-        $clientId = $keyData['client_id'];
+		if (file_exists($keyFilePath)) {
+			$jsonKey = file_get_contents($keyFilePath);
+			$keyData = json_decode($jsonKey, true);
+			$privateKey = $keyData['private_key'];
+			$clientId = $keyData['client_id'];
 
-        $now = time();
-        $expiresIn = 3600; // Token expires in 1 hour
-        $payload = [
-            'iss' => $clientId,
-            'sub' => $clientId,
-            'aud' => 'https://oauth2.googleapis.com/token',
-            'iat' => $now,
-            'exp' => $now + $expiresIn,
-            'scope' => 'https://www.googleapis.com/auth/cloud-platform',
-        ];
+			$now = time();
+			$expiresIn = 3600; // Token expires in 1 hour
+			$payload = [
+				'iss' => $clientId,
+				'sub' => $clientId,
+				'aud' => 'https://oauth2.googleapis.com/token',
+				'iat' => $now,
+				'exp' => $now + $expiresIn,
+				'scope' => 'https://www.googleapis.com/auth/cloud-platform',
+			];
 
-        $jwt = \Firebase\JWT\JWT::encode($payload, $privateKey, 'RS256');
+			$jwt = \Firebase\JWT\JWT::encode($payload, $privateKey, 'RS256');
 
-        $response = Http::asForm()->post('https://oauth2.googleapis.com/token', [
-            'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
-            'assertion' => $jwt,
-        ]);
+			$response = Http::asForm()->post('https://oauth2.googleapis.com/token', [
+				'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+				'assertion' => $jwt,
+			]);
 
-        $accessToken = $response->json()['access_token'];
+			$accessToken = $response->json()['access_token'];
 
-        return $accessToken;
-    } else {
-        throw new \Exception('API key file not found.');
-    }
+			return $accessToken;
+		} else {
+			throw new \Exception('API key file not found.');
+		}
+	}
 
 	public function synthesizeAudio($input, $voiceName, $ssml = false, $outputFormat = 'MP3', $sampleRate = 48000) {
 		$project = env('TTS_PROJECT');
