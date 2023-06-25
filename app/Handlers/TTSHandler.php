@@ -53,7 +53,7 @@ class TTSHandler {
 		}
 	}
 
-	public function synthesizeAudio($input, $voiceName, $ssml = false, $outputFormat = 'MP3', $sampleRate = 48000) {
+	public function synthesizeAudio($input, $voiceName, $languageCode, $ssml = false, $outputFormat = 'MP3', $sampleRate = 48000) {
 		$textToSpeechClient = new TextToSpeechClient();
 
 		$textInput = new SynthesisInput();
@@ -61,6 +61,7 @@ class TTSHandler {
 
 		$voice = new VoiceSelectionParams();
 		$voice->setName($voiceName);
+		$voice->setLanguageCode($languageCode);
 
 		$audioConfig = new AudioConfig();
 		$audioConfig->setAudioEncoding(AudioEncoding::MP3);

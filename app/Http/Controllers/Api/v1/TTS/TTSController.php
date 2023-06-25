@@ -19,11 +19,12 @@ class TTSController extends Controller {
 		$ssml = $request->input('ssml', false);
 		$outputFormat = $request->input('output_format', 'MP3');
 		$sampleRate = $request->input('sample_rate', 48000);
+		$languageCode = $request->input('language_code', 'en');
 
 		// Add validation and error handling as needed
 
 		// Call the TTSHandler to synthesize the audio
-		$response = $this->ttsHandler->synthesizeAudio($input, $voiceName, $ssml, $outputFormat, $sampleRate);
+		$response = $this->ttsHandler->synthesizeAudio($input, $voiceName, $languageCode, $ssml, $outputFormat, $sampleRate);
 
 		// Return the API response as-is or modify it as needed
 		return $response;
