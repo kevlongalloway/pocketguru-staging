@@ -2,6 +2,11 @@
 
 namespace App\Handlers;
 
+use Google\Cloud\TextToSpeech\V1\AudioConfig;
+use Google\Cloud\TextToSpeech\V1\AudioEncoding;
+use Google\Cloud\TextToSpeech\V1\SynthesisInput;
+use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
+use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
 use Illuminate\Support\Facades\Http;
 
 class TTSHandler {
@@ -49,37 +54,23 @@ class TTSHandler {
 	}
 
 	public function synthesizeAudio($input, $voiceName, $ssml = false, $outputFormat = 'MP3', $sampleRate = 48000) {
-		$project = env('TTS_PROJECT');
-		$location = env('TTS_LOCATION');
-		// Prepare the request body
-		$requestBody = [
-			'input' => [
-				$ssml ? 'ssml' : 'text' => $input,
-			],
-			'audioConfig' => [
-				'audioEncoding' => $outputFormat,
-				'sampleRateHertz' => $sampleRate,
-			],
-			'voice' => [
-				'name' => $voiceName,
-			],
-		];
+		$textToSpeechClient = new TextToSpeechClient();
 
-		// Create the parent URL using the format and variables
-		$parentUrl = sprintf($this->parentUrl, $project, $location);
+		$textInput = new SynthesisInput();
+		$textInput->setText($input);
 
-		// Set the request URL
-		$url = "https://texttospeech.googleapis.com/v1beta1/" . $parentUrl . ":synthesizeLongAudio";
+		$voice = new VoiceSelectionParams();
+		$voice->setName($voiceName);
 
-		// Set the request headers
-		$headers = [
-			'Content-Type' => 'application/x-www-form-urlencoded',
-			'Authorization' => 'Bearer ' . $this->apiKey,
-		];
+		$audioConfig = new AudioConfig();
+		$audioConfig->setAudioEncoding(AudioEncoding::MP3);
+		$audioConfig->setSampleRateHertz($sampleRate);
 
-		// Send the POST request
-		$response = Http::withHeaders($headers)->post($url, $requestBody);
+		$resp = $textToSpeechClient->synthesizeSpeech($textInput, $voice, $audioConfig);
+		$audioContent = $resp->getAudioContent();
 
-		return $response;
+		$textToSpeechClient->close();
+
+		return $audioContent;
 	}
 }
