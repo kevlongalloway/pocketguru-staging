@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\TTS;
 use App\Handlers\TTSHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 
 class TTSController extends Controller {
 	private $ttsHandler;
@@ -24,9 +25,12 @@ class TTSController extends Controller {
 		// Add validation and error handling as needed
 
 		// Call the TTSHandler to synthesize the audio
-		$response = $this->ttsHandler->synthesizeAudio($input, $voiceName, $languageCode, $ssml, $outputFormat, $sampleRate);
+		$audioContent = $this->ttsHandler->synthesizeAudio($input, $voiceName, $languageCode, $ssml, $outputFormat, $sampleRate);
 
 		// Return the API response as-is or modify it as needed
-		return $response;
+		return Response::make($audioContent, 200, [
+			'Content-Type' => 'audio/mpeg',
+			'Content-Disposition' => 'inline; filename="audio.mp3"',
+		]);
 	}
 }
