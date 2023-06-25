@@ -82,7 +82,7 @@ class ChatGPTHandler {
 		}
 
 		// Concatenate chat history and new messages
-		$messages = array_merge($chatHistory, $messages);
+		$messages = array_merge(array_reverse($chatHistory), $messages);
 
 		$messages[] = ['role' => 'user', 'content' => $message];
 
