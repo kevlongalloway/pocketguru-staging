@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\v1\AnswerController;
 use App\Http\Controllers\Api\v1\Auth\AuthController;
 use App\Http\Controllers\Api\v1\ChatGpt\ChatCompletionController;
+use App\Http\Controllers\Api\v1\ChatGpt\ChatGptTestingController;
 use App\Http\Controllers\Api\v1\ChatGpt\TextCompletionController;
 use App\Http\Controllers\Api\v1\QuestionController;
 use App\Http\Controllers\Api\v1\TTS\TTSController;
@@ -32,6 +33,7 @@ Route::get('/check-authentication', [AuthController::class, 'checkAuthentication
 Route::get('/chat', [ChatCompletionController::class, 'index'])->middleware('auth:sanctum');
 Route::post('/chat', [ChatCompletionController::class, 'chat'])->middleware('auth:sanctum');
 Route::post('/guided-meditation', [TextCompletionController::class, 'provideGuidedMeditation'])->middleware('auth:sanctum');
+Route::post('/test-system-message', [ChatGptTestingController::class, 'testSystemMessage'])->middleware('auth:sanctum');
 Route::post('/positive-affirmation', [TextCompletionController::class, 'providePositiveAffirmation'])->middleware('auth:sanctum');
 Route::post('/breathing-exercise', [TextCompletionController::class, 'provideBreathingExercise'])->middleware('auth:sanctum');
 Route::get('/reset-conversation', [ChatCompletionController::class, 'resetHistory'])->middleware('auth:sanctum');
