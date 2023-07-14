@@ -81,9 +81,12 @@ class ChatGPTHandler {
 			$messages[] = ['role' => 'system', 'content' => $systemMessage];
 		}
 
-		// Concatenate chat history and new messages
-		$messages = array_merge(array_reverse($chatHistory), $messages);
+		// Append chat history to messages array
+		foreach ($chatHistory as $chat) {
+			$messages[] = ['role' => 'user', 'content' => $chat];
+		}
 
+		// Add the new user message
 		$messages[] = ['role' => 'user', 'content' => $message];
 
 		// Set the request parameters
