@@ -18,7 +18,7 @@ RUN docker-php-ext-install gd pdo pdo_mysql mbstring zip
 WORKDIR /var/www/html
 
 # Copy the Laravel application files to the container
-COPY . .
+COPY ./src .
 
 # Set proper file permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
