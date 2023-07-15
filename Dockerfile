@@ -1,36 +1,25 @@
+# Use the official PHP FPM Alpine image
 FROM php:8.1.6-fpm-alpine
 
-RUN docker-php-ext-install pdo pdo_mysql
-
-# Arguments defined in docker-compose.yml
-ARG user
-ARG uid
-
 # Install system dependencies
-RUN apt update && apt install -y \
-    git \
-    curl \
+RUN apk --update --no-cache add \
+    libzip \
+    oniguruma-dev \
     libpng-dev \
-    libonig-dev \
-    libxml2-dev \
-    zip \
-    unzip
-
-# Clear cache
-RUN apt clean && rm -rf /var/lib/apt/lists/*
+    libjpeg-turbo-dev \
+    freetype-dev \
+    libzip-dev
 
 # Install PHP extensions
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
-
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Create system user to run Composer and Artisan Commands
-RUN useradd -G www-data,root -u $uid -d /home/$user $user
-RUN mkdir -p /home/$user/.composer && \
-    chown -R $user:$user /home/$user
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-install gd pdo pdo_mysql mbstring zip
 
 # Set working directory
 WORKDIR /var/www/html
 
-USER $user
+# Copy the Laravel application files to the container
+COPY . .
+
+# Set proper file permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache

@@ -57,15 +57,6 @@ class TextCompletionController {
 	}
 
 	/**
-	 * Provide a guided meditation to the user.
-	 *
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function testTextCompletionRequest($systemMessage) {
-		return response()->json($this->openaiClient->makeTextCompletionRequest($systemMessage, 300));
-	}
-
-	/**
 	 * Get user attributes specific to guided meditations.
 	 *
 	 * @return array
