@@ -19,6 +19,7 @@ use App\Orchid\Screens\User\UserEditScreen;
 use App\Orchid\Screens\User\UserListScreen;
 use App\Orchid\Screens\User\UserProfileScreen;
 use Illuminate\Support\Facades\Route;
+use Orchid\Platform\Http\Controllers\LoginController;
 use Tabuna\Breadcrumbs\Trail;
 
 /*
@@ -31,6 +32,17 @@ use Tabuna\Breadcrumbs\Trail;
 | contains the need "dashboard" middleware group. Now create something great!
 |
  */
+
+// Auth web routes
+if (config('platform.auth', true)) {
+	// Authentication Routes...
+	Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+	Route::middleware('throttle:60,1')
+		->post('login', [LoginController::class, 'login'])
+		->name('login.auth');
+
+	Route::get('lock', [LoginController::class, 'resetCookieLockMe'])->name('login.lock');
+}
 
 // Main
 Route::screen('/main', PlatformScreen::class)
