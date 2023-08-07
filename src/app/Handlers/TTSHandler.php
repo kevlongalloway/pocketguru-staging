@@ -8,6 +8,7 @@ use Google\Cloud\TextToSpeech\V1\SynthesisInput;
 use Google\Cloud\TextToSpeech\V1\TextToSpeechClient;
 use Google\Cloud\TextToSpeech\V1\VoiceSelectionParams;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TTSHandler {
 	private $apiKey;
@@ -49,7 +50,11 @@ class TTSHandler {
 
 			return $accessToken;
 		} else {
-			throw new \Exception('API key file not found.');
+			// Log a message instead of throwing an exception
+			Log::error('API key file not found.');
+
+			// Return a default value or handle the case as needed
+			return null;
 		}
 	}
 
