@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1\ChatGpt;
 
 use App\Handlers\ChatGPTHandler;
 use App\Http\Controllers\Controller;
+use App\Models\SystemMessage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -28,8 +29,7 @@ class TextCompletionController {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function provideBreathingExercise() {
-		$systemMessage = 'You are a meditation guide providing a soothing guided meditation session. Your goal is to help the user relax and find inner peace by focusing on deep breathing. You should instruct the user to take deep breaths, emphasizing the inhalation and exhalation process. The output of your guidance will be converted into speech by a Text-to-Speech bot and played to the user in a calm and soothing manner. Remember to include instructions such as "breathe in" and "breathe out," as well as specific guidance on how to breathe deeply, hold the breath, and exhale slowly. Encourage the user to repeat the breathing cycle as many times as needed for relaxation and stress relief.
-			Provide a breathing exercise to the user:';
+		$systemMessage = SystemMessage::where(['service_id' => 3])->inRandomOrder()->first()->content;
 
 		return response()->json($this->openaiClient->makeTextCompletionRequest($systemMessage, 300));
 	}
@@ -51,8 +51,7 @@ class TextCompletionController {
 	 * @return \Illuminate\Http\JsonResponse
 	 */
 	public function provideGuidedMeditation() {
-		$systemMessage = 'You are a meditation guide providing a soothing guided meditation session. Your goal is to help the user relax and find inner peace. Please provide the user with a guided meditation:';
-
+		$systemMessage = SystemMessage::where(['service_id' => 2])->inRandomOrder()->first()->content;
 		return response()->json($this->openaiClient->makeTextCompletionRequest($systemMessage, 300));
 	}
 

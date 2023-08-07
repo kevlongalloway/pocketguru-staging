@@ -14,8 +14,9 @@ class CreateSystemMessagesTable extends Migration {
 		Schema::create('system_messages', function (Blueprint $table) {
 			$table->id();
 			$table->integer('service_id');
+			$table->string('sub_service')->nullable();
+			$table->text('tags')->nullable();
 			$table->text('content');
-			$table->timestamps();
 		});
 	}
 

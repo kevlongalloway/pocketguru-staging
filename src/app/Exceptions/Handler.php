@@ -6,56 +6,53 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
 use Throwable;
 
-class Handler extends ExceptionHandler
-{
-    /**
-     * A list of the exception types that are not reported.
-     *
-     * @var array<int, class-string<Throwable>>
-     */
-    protected $dontReport = [
-        //
-    ];
+class Handler extends ExceptionHandler {
+	/**
+	 * A list of the exception types that are not reported.
+	 *
+	 * @var array<int, class-string<Throwable>>
+	 */
+	protected $dontReport = [
+		//
+	];
 
-    /**
-     * A list of the inputs that are never flashed for validation exceptions.
-     *
-     * @var array<int, string>
-     */
-    protected $dontFlash = [
-        'current_password',
-        'password',
-        'password_confirmation',
-    ];
+	/**
+	 * A list of the inputs that are never flashed for validation exceptions.
+	 *
+	 * @var array<int, string>
+	 */
+	protected $dontFlash = [
+		'current_password',
+		'password',
+		'password_confirmation',
+	];
 
-    /**
-     * Register the exception handling callbacks for the application.
-     *
-     * @return void
-     */
-    public function register()
-    {
-	    $this->renderable(function (Throwable $e) {
-            return response(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        });
-    }
+	/**
+	 * Register the exception handling callbacks for the application.
+	 *
+	 * @return void
+	 */
+	public function register() {
+		// $this->renderable(function (Throwable $e) {
+		//     return response(['error' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+		// });
+	}
 
-    /**
-     * Render an exception into an HTTP response.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Throwable  $exception
-     * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response
-     */
-    public function render($request, Throwable $exception)
-    {
-        if ($exception instanceof RouteNotFoundException) {
-            // if ($request->expectsJson()) {
-                return response()->json(['error' => 'Route not found.'], Response::HTTP_NOT_FOUND);
-            // }
-        }
+	/**
+	 * Render an exception into an HTTP response.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  \Throwable  $exception
+	 * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response
+	 */
+	public function render($request, Throwable $exception) {
+		if ($exception instanceof RouteNotFoundException) {
+			// if ($request->expectsJson()) {
+			return response()->json(['error' => 'Route not found.'], Response::HTTP_NOT_FOUND);
+			// }
+		}
 
-        return parent::render($request, $exception);
-    }
+		return parent::render($request, $exception);
+	}
 
 }
