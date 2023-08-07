@@ -26,3 +26,4 @@ COPY ./src .
 # Set proper file permissions
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 RUN chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+RUN chmod -R 777 /var/www/html/storage/logs /var/www/html/storage/framework
