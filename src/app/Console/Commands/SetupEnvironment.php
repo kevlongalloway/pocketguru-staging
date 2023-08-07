@@ -12,7 +12,7 @@ class SetupEnvironment extends Command {
 	public function handle() {
 		$this->copyEnvFileIFNotExists();
 
-		$envVars = ['DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD', 'OPENAI_API_KEY', 'GOOGLE_API_KEY', 'TTS_PARENT_FORMAT', 'TTS_PROJECT', 'TTS_LOCATION'];
+		$envVars = ['APP_URL', 'DB_CONNECTION', 'DB_HOST', 'DB_DATABASE', 'DB_USERNAME', 'DB_PASSWORD', 'OPENAI_API_KEY', 'GOOGLE_API_KEY', 'TTS_PARENT_FORMAT', 'TTS_PROJECT', 'TTS_LOCATION'];
 
 		foreach ($envVars as $envVar) {
 			if (!$this->isEnvSet($envVar)) {
