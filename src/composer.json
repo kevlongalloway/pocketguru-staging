@@ -7,6 +7,7 @@
     "require": {
         "php": "^7.3|^8.1.4",
         "backpack/crud": "^6.1",
+        "backpack/theme-tabler": "^1.0",
         "firebase/php-jwt": "^6.8",
         "google/cloud-text-to-speech": "^1.6",
         "guzzlehttp/guzzle": "^7.0.1",
@@ -17,12 +18,13 @@
         "tectalic/openai": "^1.4"
     },
     "require-dev": {
-        "spatie/laravel-ignition": "^2.0",
+        "backpack/generators": "^4.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.0"
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0"
     },
     "autoload": {
         "psr-4": {
@@ -49,7 +51,8 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
-        ]
+        ],
+        "post-install-cmd": ["php artisan storage:link --quiet"]
 
     },
     "extra": {
