@@ -46,12 +46,6 @@ class Handler extends ExceptionHandler {
 	 * @return \Symfony\Component\HttpFoundation\Response|\Illuminate\Http\Response
 	 */
 	public function render($request, Throwable $exception) {
-		if ($exception instanceof RouteNotFoundException) {
-			// if ($request->expectsJson()) {
-			return response()->json(['error' => 'Route not found.'], Response::HTTP_NOT_FOUND);
-			// }
-		}
-
 		return parent::render($request, $exception);
 	}
 
