@@ -52,7 +52,14 @@ class SystemMessageCrudController extends CrudController {
 	 */
 	protected function setupCreateOperation() {
 		CRUD::setValidation(SystemMessageRequest::class);
-		CRUD::field('service_id')->type('select')->model('App\Models\Service')->attribute('name')->entity('service');
+		// Add a field to select a service using a dropdown
+		CRUD::field('service_id')
+			->type('select')
+			->model('App\Models\Service') // Specify the model to fetch data from
+			->attribute('name') // Specify the attribute to display in the dropdown
+			->entity('service'); // Assign an alias to the relationship
+
+		// Add a field for the content
 		CRUD::addField([
 			'name' => 'content',
 			'type' => 'text',
