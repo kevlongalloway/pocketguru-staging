@@ -62,7 +62,7 @@ class SystemMessageCrudController extends CrudController {
 		// Add a field for the content
 		CRUD::addField([
 			'name' => 'content',
-			'type' => 'text',
+			'type' => 'textarea',
 			'label' => "Content",
 		]);
 
