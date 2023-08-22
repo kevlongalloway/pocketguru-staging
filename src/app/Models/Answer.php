@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
@@ -10,6 +11,7 @@ use App\Models\Option;
 
 class Answer extends Model
 {
+    use CrudTrait;
     use HasFactory;
 
     /**
