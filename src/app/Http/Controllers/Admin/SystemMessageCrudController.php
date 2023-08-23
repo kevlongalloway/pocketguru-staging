@@ -64,7 +64,7 @@ class SystemMessageCrudController extends CrudController {
 			'name' => 'content',
 			'type' => 'textarea',
 			'label' => "Content",
-			'placeholder' => "Specify how you want ChatGPT to act in the service. For instance, input 'please provide the user with advice'.",
+			'placeholder' => "e.g. 'Please provide the user with advice'.",
 		]);
 
 		/**
