@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use App\Models\Answer;
 use App\Models\SubscriptionTier;
+use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable {
-    use CrudTrait;
+	use CrudTrait;
 	use HasApiTokens;
 	/**
 	 * The attributes that are mass assignable.
@@ -21,6 +21,7 @@ class User extends Authenticatable {
 		'email',
 		'password',
 		'permissions',
+		'subscription_tier_id',
 	];
 
 	/**

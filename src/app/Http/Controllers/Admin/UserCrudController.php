@@ -70,6 +70,12 @@ class UserCrudController extends CrudController {
 				return Hash::make($value); // Hash the password using Laravel's Hash::make() method
 			});
 
+		CRUD::field('subscription_tier_id')
+			->type('select')
+			->model('App\Models\SubscriptionTier') // Specify the model to fetch data from
+			->attribute('name') // Specify the attribute to display in the dropdown
+			->entity('subscription_tier'); // Assign an alias to the relationship
+
 		/**
 		 * Fields can be defined using the fluent syntax:
 		 * - CRUD::field('price')->type('number');
