@@ -74,7 +74,7 @@ class UserCrudController extends CrudController {
 			->type('select')
 			->model('App\Models\SubscriptionTier') // Specify the model to fetch data from
 			->attribute('name') // Specify the attribute to display in the dropdown
-			->entity('subscription_tier'); // Assign an alias to the relationship
+			->entity('subscriptionTier'); // Assign an alias to the relationship
 
 		/**
 		 * Fields can be defined using the fluent syntax:
