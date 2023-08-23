@@ -9,5 +9,5 @@
 	<x-backpack::menu-dropdown-item title="User Questions" icon="las la-question-circle" :link="backpack_url('question')" />
 	<x-backpack::menu-dropdown-item title="Services" icon="las la-wrench" :link="backpack_url('service')" />
 	<x-backpack::menu-dropdown-item title="Subscription tiers" icon="las la-layer-group" :link="backpack_url('subscription-tier')" />
-	<x-backpack::menu-item title="Users" icon="las la-users" :link="backpack_url('user')" />
+	<x-backpack::menu-dropdown-item title="Users" icon="las la-users" :link="backpack_url('user')" />
 </x-backpack::menu-dropdown>

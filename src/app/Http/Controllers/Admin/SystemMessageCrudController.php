@@ -52,20 +52,12 @@ class SystemMessageCrudController extends CrudController {
 	 */
 	protected function setupCreateOperation() {
 		CRUD::setValidation(SystemMessageRequest::class);
-
 		// Add a field to select a service using a dropdown
 		CRUD::field('service_id')
 			->type('select')
 			->model('App\Models\Service') // Specify the model to fetch data from
 			->attribute('name') // Specify the attribute to display in the dropdown
-			->entity('service') // Assign an alias to the relationship
-			->placeholder('Select a service') // Add a placeholder text
-
-		// Configure the "nothing selected" option
-			->default(-1) // Assuming -1 is an unused ID, can be any value not present in the database
-			->options(function ($query) {
-				return $query->pluck('name', 'id')->prepend('Nothing selected', -1);
-			});
+			->entity('service'); // Assign an alias to the relationship
 
 		// Add a field for the content
 		CRUD::addField([
@@ -73,6 +65,11 @@ class SystemMessageCrudController extends CrudController {
 			'type' => 'textarea',
 			'label' => "Content",
 		]);
+
+		/**
+		 * Fields can be defined using the fluent syntax:
+		 * - CRUD::field('price')->type('number');
+		 */
 	}
 
 	/**
