@@ -8,7 +8,7 @@ class CorsMiddleware {
 	public function handle($request, Closure $next) {
 		// List of allowed origins (your web app and website URLs)
 		$allowedOrigins = [
-			'https://demo.pocketguruai.com',
+			'https://demo.pocketguruai.com/',
 		];
 
 		$origin = $request->header('Origin');
