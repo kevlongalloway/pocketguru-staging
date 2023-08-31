@@ -5,9 +5,13 @@
 
     RewriteEngine On
 
-    # HTTPS Redirection
+    # HTTPS Redirection for the entire site
     RewriteCond %{HTTPS} off
     RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # HTTPS Redirection specifically for /admin
+    RewriteCond %{HTTPS} off
+    RewriteRule ^admin https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
