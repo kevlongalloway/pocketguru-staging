@@ -11,152 +11,104 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class ChatCompletionController extends Controller {
-	private $openaiClient;
-	private $systemMessages;
-	private $conversationHistoryLimit = 4096;
+    private $openaiClient;
+    private $conversationHistoryLimit = 4096;
 
-	/**
-	 * Handle the chat API request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function chat(Request $request) {
-		$validator = Validator::make($request->all(), [
-			"message" => "required|max:2048",
-		]);
+    public function __construct() {
+        $this->openaiClient = new ChatGPTHandler;
+    }
 
-		if ($validator->fails()) {
-			return response()->json($validator->errors());
-		}
+    public function chat(Request $request) {
+        $validator = Validator::make($request->all(), [
+            "message" => "required|max:2048",
+        ]);
 
-		// Get the user's message from the request
-		$message = $request->input("message");
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
 
-		// Retrieve the authenticated user
-		$user = Auth::user();
+        // Get the user's message from the request
+        $message = $request->input("message");
 
-		// Retrieve the existing conversation history from the user model
-		$conversationHistory = json_decode($user->conversation_history, true) ?? [];
+        // Retrieve the authenticated user
+        $user = Auth::user();
 
-		// Check if the conversation is being initialized
-		$isConversationEmpty = empty($conversationHistory);
+        // Retrieve the existing conversation history from the user model
+        $conversationHistory = json_decode($user->conversation_history, true) ?? [];
 
-		if ($isConversationEmpty) {
-			$systemMessage = $this->getRandomSystemMessage();
-		} else {
-			$systemMessage = $this->findSystemMessage($conversationHistory);
-			if ($systemMessage === null) {
-				$systemMessage = $this->getRandomSystemMessage();
-			}
-		}
+        // Truncate the conversation history if it exceeds the character limit
+        $conversationHistory = $this->truncateConversationHistory($conversationHistory, 10);
 
-		// Truncate the conversation history if it exceeds the character limit
-		$conversationHistory = $this->truncateConversationHistory($conversationHistory, 10);
+        // Make the chat completion request
+        $response = $this->openaiClient->makeChatCompletionRequest(
+            $message,
+            $conversationHistory,
+            $this->findOrRandomSystemMessage($conversationHistory)
+        );
 
-		$openaiClient = new ChatGPTHandler;
+        $assistantReply = $response->original['response'];
 
-		// Make the chat completion request
-		$response = $openaiClient->makeChatCompletionRequest(
-			$message,
-			$conversationHistory,
-			$systemMessage
-		);
+        // Append the user's message and the response to the conversation history
+        $this->appendChatToHistory($conversationHistory, "user", $message);
+        $this->appendChatToHistory($conversationHistory, "assistant", $assistantReply);
 
-		$assistantReply = $response->original['response'];
+        // Save the updated conversation history to the user model
+        $user->conversation_history = json_encode($conversationHistory);
+        $user->save();
 
-		// Append the user's message and the response to the conversation history
+        // Return the chat response as JSON with a 200 HTTP status code
+        return response()->json([
+            "response" => $assistantReply,
+            "history" => $conversationHistory,
+        ], Response::HTTP_OK);
+    }
 
-		$this->appendChatToHistory($conversationHistory, "user", $message);
-		$this->appendChatToHistory($conversationHistory, "assistant", $assistantReply);
+    public function index() {
+        return response()->json(Auth::user()->conversation_history);
+    }
 
-		// Save the updated conversation history to the user model
-		$user->conversation_history = json_encode($conversationHistory);
-		$user->save();
+    private function findOrRandomSystemMessage($conversationHistory) {
+        foreach ($conversationHistory as $chat) {
+            if ($chat['role'] === 'system') {
+                return $chat['content'];
+            }
+        }
 
-		// Return the chat response as JSON with a 200 HTTP status code
-		return response()->json([
-			"response" => $assistantReply,
-			"history" => $conversationHistory,
-		], Response::HTTP_OK);
-	}
+        // If no system message is found in the conversation history, get a random one.
+        return $this->getRandomSystemMessage();
+    }
 
-	public function index() {
-		return response()->json(Auth::user()->conversation_history);
-	}
+    private function appendChatToHistory(&$conversationHistory, $role, $content) {
+        $conversationHistory[] = [
+            "role" => $role,
+            "content" => $content,
+        ];
+    }
 
-	/**
-	 * Find the system message from the conversation history.
-	 *
-	 * @param  array  $conversationHistory
-	 * @return string|null
-	 */
-	private function findSystemMessage($conversationHistory) {
-		foreach ($conversationHistory as $chat) {
-			if ($chat['role'] === 'system') {
-				return $chat['content'];
-			}
-		}
-		return null;
-	}
+    public function resetHistory(Request $request) {
+        // Retrieve the authenticated user
+        $user = Auth::user();
 
-	/**
-	 * Append a new chat entry to the conversation history.
-	 *
-	 * @param  array  $conversationHistory
-	 * @param  string  $role
-	 * @param  string  $content
-	 * @return void
-	 */
-	private function appendChatToHistory(&$conversationHistory, $role, $content) {
-		$conversationHistory[] = [
-			"role" => $role,
-			"content" => $content,
-		];
-	}
+        // Clear the conversation history on the user model
+        $user->conversation_history = null;
+        $user->save();
 
-	/**
-	 * Reset the conversation history for the authenticated user.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @return \Illuminate\Http\JsonResponse
-	 */
-	public function resetHistory(Request $request) {
-		// Retrieve the authenticated user
-		$user = Auth::user();
+        // Return a success response with a 200 HTTP status code
+        return response()->json(
+            ["message" => "Conversation history has been reset."],
+            Response::HTTP_OK
+        );
+    }
 
-		// Clear the conversation history on the user model
-		$user->conversation_history = null;
-		$user->save();
+    private function truncateConversationHistory($history, $maxLength) {
+        if (count($history) > $maxLength) {
+            array_shift($history);
+        }
+        return $history;
+    }
 
-		// Return a success response with a 200 HTTP status code
-		return response()->json(
-			["message" => "Conversation history has been reset."],
-			Response::HTTP_OK
-		);
-	}
-
-	/**
-	 * Truncate the conversation history if it exceeds the maximum length.
-	 *
-	 * @param  array  $history
-	 * @param  int  $maxLength
-	 * @return array
-	 */
-	private function truncateConversationHistory($history, $maxLength) {
-		if (count($history) > $maxLength) {
-			array_shift($history);
-		}
-		return $history;
-	}
-
-	/**
-	 * Get a random system message from the loaded messages.
-	 *
-	 * @return string
-	 */
-	private function getRandomSystemMessage() {
-		$systemMessage = SystemMessage::where('service_id', 1)->inRandomOrder()->first()->content;
-		return $systemMessage;
-	}
+    private function getRandomSystemMessage() {
+        $systemMessage = SystemMessage::where('service_id', 1)->inRandomOrder()->first()->content;
+        return $systemMessage;
+    }
 }
