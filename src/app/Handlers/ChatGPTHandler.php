@@ -84,6 +84,8 @@ class ChatGPTHandler {
 		// Append chat history to messages array
 		foreach ($chatHistory as $chat) {
 			$messages[] = ['role' => 'user', 'content' => $chat];
+			// Make sure to include the assistant's responses in the history
+			$messages[] = ['role' => 'assistant', 'content' => $chat['response']['content']];
 		}
 
 		// Add the new user message
@@ -118,4 +120,5 @@ class ChatGPTHandler {
 			Response::HTTP_OK
 		);
 	}
+
 }
