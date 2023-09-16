@@ -11,6 +11,8 @@
       <link rel="manifest" href="/site.webmanifest">
       <meta name="msapplication-TileColor" content="#da532c">
       <meta name="theme-color" content="#ffffff">
+      <meta name="description" content="Discover PocketGuruAI, the future of mental health and mindfulness. Our AI-driven platform is on a mission to make mental wellness accessible to all. Experience personalized guidance that elevates your well-being and transforms institutional mental health support. Coming soon to the App Store and Google Play.">
+
       <!-- Fonts -->
       <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
       <script src="https://cdn.tailwindcss.com"></script>
