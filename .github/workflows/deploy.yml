@@ -23,5 +23,5 @@ jobs:
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh $SSH_USERNAME@24.199.103.78 "cd ~/pocketguru-staging && git pull origin master"  # Adjust the directory and branch as needed
+          ssh root@24.199.103.78 "cd ~/pocketguru-staging && git pull origin master"  # Adjust the directory and branch as needed
 
