@@ -3,54 +3,25 @@ name: Deploy to DigitalOcean
 on:
   push:
     branches:
-      - master
+      - main  # Change to your main branch name
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest  # You can choose an appropriate runner
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up SSH connection
-        uses: webfactory/ssh-agent@v0.5.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Install dependencies and build
+      - name: Set up SSH key
         run: |
-          cd /var/www/html/pocketguru
-          composer install --no-dev --prefer-dist --no-interaction --quiet
-          npm install
-          npm run production
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan your-digitalocean-server-ip >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy to DigitalOcean
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DIGITALOCEAN_SERVER }}
-          username: ${{ secrets.DIGITALOCEAN_USERNAME }}
-          source: "." # Path to your Laravel project
-          target: "/var/www/html/pocketguru" # Destination directory on the server
+        run: |
+          ssh $SSH_USERNAME@24.199.103.78 "cd ~/pocketguru-staging && git pull origin master"  # Adjust the directory and branch as needed
 
-      - name: SSH into DigitalOcean server and run commands
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DIGITALOCEAN_SERVER }}
-          username: ${{ secrets.DIGITALOCEAN_USERNAME }}
-          script: |
-            cd /var/www/html/pocketguru # Change to your project's directory
-            cp .env.example .env # Copy the example environment file
-            php artisan key:generate # Generate application key
-            php artisan migrate:fresh --force # Run database migrations
-            php artisan config:cache # Cache configuration
-            php artisan route:cache # Cache routes
-
-      - name: Restart web server
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.DIGITALOCEAN_SERVER }}
-          username: ${{ secrets.DIGITALOCEAN_USERNAME }}
-          password: ${{ secrets.DIGITALOCEAN_PASSWORD }}
-          script: |
-            sudo systemctl restart apache2 # Restart Apache or use the appropriate command for your web server
