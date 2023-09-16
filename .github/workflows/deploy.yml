@@ -10,6 +10,11 @@ jobs:
     runs-on: ubuntu-latest  # You can choose an appropriate runner
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
