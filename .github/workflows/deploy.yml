@@ -3,7 +3,7 @@ name: Deploy to DigitalOcean
 on:
   push:
     branches:
-      - master  # Change to your main branch name
+      - master  # Change to your defauly branch name
 
 jobs:
   deploy:
@@ -11,17 +11,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan your-digitalocean-server-ip >> ~/.ssh/known_hosts
+          ssh-keyscan 24.199.103.78 >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
       - name: Deploy to DigitalOcean
         run: |
-          ssh $SSH_USERNAME@24.199.103.78 "cd ~/pocketguru-staging && git pull origin master"  # Adjust the directory and branch as needed
+          ssh root@24.199.103.78 "cd ~/pocketguru-staging && git pull origin master"  # Adjust the directory and branch as needed
 
