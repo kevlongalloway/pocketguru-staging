@@ -32,3 +32,5 @@ Route::get('/auth/google/callback', [OAuthController::class, 'handleGoogleCallba
 // Apple Authentication Routes
 Route::get('/auth/apple', [OAuthController::class, 'redirectToApple'])->name('auth.apple.redirect');
 Route::get('/auth/apple/callback', [OAuthController::class, 'handleAppleCallback'])->name('auth.apple.callback');
+
+Route::get('/sitemap.xml', 'SitemapController@index');
