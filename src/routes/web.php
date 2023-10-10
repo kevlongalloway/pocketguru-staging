@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Api\v1\Auth\OAuthController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WaitlistController;
-use App\Http\Controllers/SitemapController;
 use Illuminate\Support\Facades\Route;
 
 /*
