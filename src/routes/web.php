@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\v1\Auth\OAuthController;
 use App\Http\Controllers\WaitlistController;
+use App\Http\Controllers/SitemapController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +34,4 @@ Route::get('/auth/google/callback', [OAuthController::class, 'handleGoogleCallba
 Route::get('/auth/apple', [OAuthController::class, 'redirectToApple'])->name('auth.apple.redirect');
 Route::get('/auth/apple/callback', [OAuthController::class, 'handleAppleCallback'])->name('auth.apple.callback');
 
-Route::get('/sitemap.xml', 'SitemapController@index');
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
