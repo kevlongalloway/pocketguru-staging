@@ -30,8 +30,10 @@
                <div class="lg:grid lg:grid-cols-2 lg:gap-8">
                   <div class="mx-auto max-w-md px-4 text-center sm:max-w-2xl sm:px-6 lg:flex lg:items-center lg:px-0 lg:text-left">
                      <div class="lg:py-24">
-                        <h1 class="mt-4 text-4xl font-bold tracking-tight text-black sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl"><span class="block text-pink-500">PocketGuru</span><span class="block text-black">Coming Soon!</span></h1>
-                        <p class="mt-3 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">Our App will launch soon. Join the waitlist to try the beta before it's publicly available.</p>
+                        <h1 class="mt-4 text-4xl font-bold tracking-tight text-black sm:mt-5 sm:text-6xl lg:mt-6 xl:text-6xl"><span class="block text-pink-500">PocketGuruAI</span><span class="block text-black">Coming Soon!</span></h1>
+                        <p class="mt-3 text-base text-gray-400 sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+  Experience Mindfulness and Meditation with PocketGuruAI - Join the Beta Waitlist!
+</p>
                         <div class="mt-10 sm:mt-12">
                            <!-- This is a working waitlist form. Create your access key from https://web3forms.com/s to setup.  -->
                            <form class="sm:mx-auto sm:max-w-xl lg:mx-0" action="{{  route('store_email') }}" method="post">
