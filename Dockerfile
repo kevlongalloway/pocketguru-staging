@@ -1,5 +1,5 @@
 # Use the official PHP FPM Alpine image
-FROM php:8.1.6-fpm-alpine
+FROM php:8.1-fpm-alpine
 
 # Install system dependencies
 RUN apk --update --no-cache add \
