@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0a0f1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pocket Guru">
+  <meta name="description" content="AI-powered wellness companion for meditation, breathing, and mental wellbeing.">
+  <title>Pocket Guru AI</title>
+  <link rel="manifest" href="/app/manifest.json">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;1,400&display=swap">
+  <link rel="stylesheet" href="/app/css/styles.css">
+</head>
+<body>
+
+  <!-- Canvas for particle background -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- SPLASH SCREEN                                   -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-splash" class="view active">
+    <div class="splash-content">
+      <div class="splash-logo">
+        <img src="/app/icon.svg" alt="Pocket Guru" class="splash-icon">
+        <div class="splash-glow"></div>
+      </div>
+      <h1 class="splash-title">Pocket Guru</h1>
+      <p class="splash-subtitle">Your AI wellness companion</p>
+      <div class="splash-loader">
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+        <div class="loader-dot"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- AUTH SCREEN                                     -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-auth" class="view">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <img src="/app/icon.svg" alt="Pocket Guru" width="64" height="64">
+        <h2>Pocket Guru</h2>
+        <p>Begin your wellness journey</p>
+      </div>
+
+      <div class="tab-switcher">
+        <button class="tab-btn active" data-tab="login">Sign In</button>
+        <button class="tab-btn" data-tab="register">Create Account</button>
+        <div class="tab-indicator"></div>
+      </div>
+
+      <!-- Login Form -->
+      <form id="form-login" class="auth-form active" novalidate>
+        <div class="form-group">
+          <label for="login-email">Email</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password" required>
+          </div>
+        </div>
+        <div id="login-error" class="form-error hidden"></div>
+        <button type="submit" class="btn-primary btn-full" id="btn-login">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-spinner hidden"></span>
+        </button>
+      </form>
+
+      <!-- Register Form -->
+      <form id="form-register" class="auth-form" novalidate>
+        <div class="form-group">
+          <label for="register-name">Full Name</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input type="text" id="register-name" placeholder="Your name" autocomplete="name" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="register-email">Email</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input type="email" id="register-email" placeholder="you@example.com" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="register-password">Password</label>
+          <div class="input-wrapper">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input type="password" id="register-password" placeholder="At least 8 characters" autocomplete="new-password" required>
+          </div>
+        </div>
+        <div id="register-error" class="form-error hidden"></div>
+        <button type="submit" class="btn-primary btn-full" id="btn-register">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-spinner hidden"></span>
+        </button>
+      </form>
+
+      <p class="auth-legal">By continuing you agree to our Terms of Service & Privacy Policy</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- ONBOARDING / QUESTIONNAIRE                      -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="view-onboarding" class="view">
+    <div class="onboarding-container">
+      <div class="onboarding-header">
+        <div class="progress-bar-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="onboarding-progress"></div>
+          </div>
+          <span class="progress-label" id="progress-label">1 of 5</span>
+        </div>
+        <button class="btn-skip" id="btn-skip-onboarding">Skip</button>
+      </div>
+
+      <div id="question-container" class="question-container">
+        <!-- Questions rendered dynamically by app.js -->
+        <div class="question-loading">
+          <div class="orb-loader"></div>
+          <p>Personalizing your experience...</p>
+        </div>
+      </div>
+
+      <div class="onboarding-nav">
+        <button id="btn-prev-q" class="btn-ghost" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+          Back
+        </button>
+        <button id="btn-next-q" class="btn-primary">
+          Next
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9,18 15,12 9,6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- MAIN APP LAYOUT (with bottom nav)               -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="app-layout" class="hidden">
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- HOME DASHBOARD                          -->
+    <!-- ─────────────────────────────────────── -->
+    <div id="view-home" class="app-view active">
+      <div class="home-header">
+        <div class="home-greeting">
+          <p class="greeting-time" id="greeting-time">Good morning</p>
+          <h1 class="greeting-name">Hello, <span id="user-display-name">Friend</span> 👋</h1>
+        </div>
+        <button class="btn-avatar" id="btn-open-settings" aria-label="Settings">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="daily-card" id="daily-affirmation-card">
+        <div class="daily-card-inner">
+          <div class="daily-card-icon">✨</div>
+          <div class="daily-card-content">
+            <p class="daily-card-label">Today's Affirmation</p>
+            <p class="daily-card-text" id="home-affirmation-text">Loading your daily affirmation...</p>
+          </div>
+          <button class="btn-play-card" id="btn-home-affirmation-play" aria-label="Listen">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="section-label">Your Practices</div>
+      <div class="features-grid">
+        <button class="feature-card" data-nav="meditation" aria-label="Meditation">
+          <div class="feature-card-bg meditation-bg"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="14" r="6" fill="rgba(167,139,250,0.3)" stroke="#a78bfa" stroke-width="1.5"/>
+              <path d="M8 36c0-8.837 7.163-16 16-16s16 7.163 16 16" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="24" cy="36" r="3" fill="#a78bfa"/>
+              <path d="M14 32c-3 0-6 2-6 4M34 32c3 0 6 2 6 4" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Meditate</h3>
+          <p>AI-guided sessions</p>
+        </button>
+
+        <button class="feature-card" data-nav="breathing" aria-label="Breathing">
+          <div class="feature-card-bg breathing-bg"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 48 48" fill="none">
+              <circle cx="24" cy="24" r="10" stroke="#38bdf8" stroke-width="1.5"/>
+              <circle cx="24" cy="24" r="16" stroke="#38bdf8" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+              <circle cx="24" cy="24" r="5" fill="#38bdf8" opacity="0.7"/>
+              <path d="M24 8v4M24 36v4M8 24h4M36 24h4" stroke="#38bdf8" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Breathe</h3>
+          <p>Calm your nervous system</p>
+        </button>
+
+        <button class="feature-card" data-nav="chat" aria-label="Talk to AI">
+          <div class="feature-card-bg chat-bg"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 48 48" fill="none">
+              <path d="M40 8H8a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h8l8 8 8-8h8a2 2 0 0 0 2-2V10a2 2 0 0 0-2-2z" stroke="#34d399" stroke-width="1.5" fill="rgba(52,211,153,0.1)"/>
+              <circle cx="17" cy="20" r="2" fill="#34d399"/>
+              <circle cx="24" cy="20" r="2" fill="#34d399"/>
+              <circle cx="31" cy="20" r="2" fill="#34d399"/>
+            </svg>
+          </div>
+          <h3>Talk</h3>
+          <p>AI therapist</p>
+        </button>
+
+        <button class="feature-card" data-nav="affirmations" aria-label="Affirmations">
+          <div class="feature-card-bg affirmation-bg"></div>
+          <div class="feature-icon">
+            <svg viewBox="0 0 48 48" fill="none">
+              <polygon points="24,6 29,18 42,18 32,27 36,40 24,32 12,40 16,27 6,18 19,18" stroke="#f472b6" stroke-width="1.5" fill="rgba(244,114,182,0.15)"/>
+            </svg>
+          </div>
+          <h3>Affirm</h3>
+          <p>Positive intentions</p>
+        </button>
+      </div>
+
+      <div class="section-label">Quick Start</div>
+      <div class="quick-starts">
+        <button class="quick-start-btn" data-nav="breathing" data-pattern="box">
+          <span class="qs-emoji">🌬️</span>
+          <div>
+            <p class="qs-title">Box Breathing</p>
+            <p class="qs-sub">4 min · Stress relief</p>
+          </div>
+        </button>
+        <button class="quick-start-btn" data-nav="meditation" data-type="sleep">
+          <span class="qs-emoji">🌙</span>
+          <div>
+            <p class="qs-title">Sleep Meditation</p>
+            <p class="qs-sub">10 min · Restful sleep</p>
+          </div>
+        </button>
+        <button class="quick-start-btn" data-nav="meditation" data-type="focus">
+          <span class="qs-emoji">🎯</span>
+          <div>
+            <p class="qs-title">Focus Flow</p>
+            <p class="qs-sub">5 min · Clarity & focus</p>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- MEDITATION VIEW                         -->
+    <!-- ─────────────────────────────────────── -->
+    <div id="view-meditation" class="app-view">
+      <div class="app-view-header">
+        <button class="btn-back" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+        </button>
+        <h2>Meditate</h2>
+        <div class="header-spacer"></div>
+      </div>
+
+      <!-- Ambient sound selector -->
+      <div class="ambient-selector">
+        <button class="ambient-btn active" data-sound="ocean" aria-label="Ocean sounds">
+          <span class="ambient-emoji">🌊</span>
+          <span>Ocean</span>
+        </button>
+        <button class="ambient-btn" data-sound="rain" aria-label="Rain sounds">
+          <span class="ambient-emoji">🌧</span>
+          <span>Rain</span>
+        </button>
+        <button class="ambient-btn" data-sound="forest" aria-label="Forest sounds">
+          <span class="ambient-emoji">🌲</span>
+          <span>Forest</span>
+        </button>
+        <button class="ambient-btn" data-sound="space" aria-label="Space sounds">
+          <span class="ambient-emoji">✨</span>
+          <span>Space</span>
+        </button>
+        <button class="ambient-btn" data-sound="none" aria-label="No ambient sound">
+          <span class="ambient-emoji">🔇</span>
+          <span>Silent</span>
+        </button>
+      </div>
+
+      <!-- Meditation orb visual -->
+      <div class="meditation-visual">
+        <div class="meditation-orb" id="meditation-orb">
+          <div class="orb-ring r1"></div>
+          <div class="orb-ring r2"></div>
+          <div class="orb-ring r3"></div>
+          <div class="orb-core">
+            <svg viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="30" cy="22" r="8" fill="rgba(167,139,250,0.4)" stroke="#a78bfa" stroke-width="1"/>
+              <path d="M16 44c0-7.732 6.268-14 14-14s14 6.268 14 14" stroke="#a78bfa" stroke-width="1.5" stroke-linecap="round"/>
+              <path d="M8 40c-2 0-4 1.5-4 3M52 40c2 0 4 1.5 4 3" stroke="#a78bfa" stroke-width="1" stroke-linecap="round"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session type selector -->
+      <div class="session-type-container">
+        <p class="section-label-sm">Session type</p>
+        <div class="session-types">
+          <button class="session-type-btn active" data-type="stress">Stress Relief</button>
+          <button class="session-type-btn" data-type="sleep">Sleep</button>
+          <button class="session-type-btn" data-type="focus">Focus</button>
+          <button class="session-type-btn" data-type="anxiety">Anxiety</button>
+          <button class="session-type-btn" data-type="gratitude">Gratitude</button>
+        </div>
+      </div>
+
+      <!-- Meditation text display -->
+      <div class="meditation-text-box" id="meditation-text-box">
+        <p id="meditation-display-text" class="meditation-display-text">
+          Choose a session type and tap "Generate" to receive your personalized AI meditation script.
+        </p>
+        <div class="meditation-word-highlight" id="word-highlight"></div>
+      </div>
+
+      <!-- Controls -->
+      <div class="meditation-controls">
+        <div class="volume-row">
+          <span class="vol-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            </svg>
+            Voice
+          </span>
+          <input type="range" id="voice-volume" class="vol-slider" min="0" max="100" value="80" aria-label="Voice volume">
+          <span class="vol-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+            </svg>
+            Ambient
+          </span>
+          <input type="range" id="ambient-volume" class="vol-slider" min="0" max="100" value="40" aria-label="Ambient volume">
+        </div>
+
+        <div class="control-row">
+          <button class="btn-secondary btn-control" id="btn-generate-meditation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+            Generate
+          </button>
+          <button class="btn-play-main" id="btn-play-meditation" disabled aria-label="Play">
+            <svg id="play-icon" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+            <svg id="pause-icon" viewBox="0 0 24 24" fill="currentColor" class="hidden"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <button class="btn-secondary btn-control" id="btn-stop-meditation" disabled>
+            <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+            Stop
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- BREATHING EXERCISE VIEW                 -->
+    <!-- ─────────────────────────────────────── -->
+    <div id="view-breathing" class="app-view">
+      <div class="app-view-header">
+        <button class="btn-back" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+        </button>
+        <h2>Breathe</h2>
+        <div class="header-spacer"></div>
+      </div>
+
+      <!-- Pattern selector -->
+      <div class="pattern-selector">
+        <button class="pattern-btn active" data-pattern="box">
+          <span class="pattern-name">Box</span>
+          <span class="pattern-ratio">4·4·4·4</span>
+        </button>
+        <button class="pattern-btn" data-pattern="478">
+          <span class="pattern-name">4-7-8</span>
+          <span class="pattern-ratio">4·7·8</span>
+        </button>
+        <button class="pattern-btn" data-pattern="deep">
+          <span class="pattern-name">Deep Calm</span>
+          <span class="pattern-ratio">5·2·7</span>
+        </button>
+        <button class="pattern-btn" data-pattern="energy">
+          <span class="pattern-name">Energize</span>
+          <span class="pattern-ratio">2·2</span>
+        </button>
+      </div>
+
+      <!-- Breathing visual -->
+      <div class="breathing-stage">
+        <div class="breath-outer-ring" id="breath-outer-ring"></div>
+        <div class="breath-mid-ring" id="breath-mid-ring"></div>
+        <div class="breath-circle" id="breath-circle">
+          <span class="breath-label" id="breath-label">Ready</span>
+          <span class="breath-timer" id="breath-timer"></span>
+        </div>
+      </div>
+
+      <!-- Pattern info -->
+      <div class="pattern-info-box" id="pattern-info-box">
+        <h3 id="pattern-title">Box Breathing</h3>
+        <p id="pattern-description">Inhale 4s · Hold 4s · Exhale 4s · Hold 4s</p>
+        <p class="pattern-benefit" id="pattern-benefit">Reduces stress and improves concentration</p>
+      </div>
+
+      <!-- Cycle counter -->
+      <div class="cycle-counter">
+        <div class="cycle-display">
+          <span class="cycle-number" id="cycle-count">0</span>
+          <span class="cycle-label">cycles</span>
+        </div>
+        <div class="cycle-goal">
+          <span>Goal: </span>
+          <select id="cycle-goal-select" class="cycle-goal-select">
+            <option value="3">3 cycles</option>
+            <option value="5" selected>5 cycles</option>
+            <option value="10">10 cycles</option>
+            <option value="0">Unlimited</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="breathing-controls">
+        <button class="btn-primary btn-lg" id="btn-start-breathing">
+          Start Breathing
+        </button>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- AFFIRMATIONS VIEW                       -->
+    <!-- ─────────────────────────────────────── -->
+    <div id="view-affirmations" class="app-view">
+      <div class="app-view-header">
+        <button class="btn-back" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+        </button>
+        <h2>Affirmations</h2>
+        <div class="header-spacer"></div>
+      </div>
+
+      <div class="affirmations-container">
+        <div class="affirmation-card-main">
+          <div class="affirmation-stars">
+            <svg viewBox="0 0 60 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="6" cy="6" r="1.5" fill="#f472b6" opacity="0.7"/>
+              <circle cx="15" cy="3" r="1" fill="#a78bfa" opacity="0.8"/>
+              <circle cx="24" cy="7" r="2" fill="#f472b6" opacity="0.6"/>
+              <circle cx="36" cy="2" r="1.5" fill="#a78bfa" opacity="0.7"/>
+              <circle cx="45" cy="8" r="1" fill="#f472b6" opacity="0.5"/>
+              <circle cx="54" cy="4" r="2" fill="#a78bfa" opacity="0.6"/>
+            </svg>
+          </div>
+          <p class="affirmation-main-label">Your affirmation</p>
+          <p class="affirmation-main-text" id="affirmation-text">
+            Loading your personalized affirmation...
+          </p>
+          <div class="affirmation-actions">
+            <button class="btn-affirmation-speak" id="btn-speak-affirmation">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+                <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
+              </svg>
+              Listen
+            </button>
+          </div>
+        </div>
+
+        <button class="btn-primary btn-full" id="btn-new-affirmation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <polyline points="23,4 23,10 17,10"/><polyline points="1,20 1,14 7,14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+          </svg>
+          New Affirmation
+        </button>
+
+        <div class="affirmation-history" id="affirmation-history">
+          <!-- Previous affirmations -->
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- CHAT VIEW                               -->
+    <!-- ─────────────────────────────────────── -->
+    <div id="view-chat" class="app-view">
+      <div class="app-view-header chat-header">
+        <button class="btn-back" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+        </button>
+        <div class="chat-header-info">
+          <div class="chat-avatar">
+            <svg viewBox="0 0 32 32" fill="none">
+              <circle cx="16" cy="16" r="16" fill="url(#chatAvatarGrad)"/>
+              <defs>
+                <linearGradient id="chatAvatarGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7c3aed"/>
+                  <stop offset="100%" stop-color="#0ea5e9"/>
+                </linearGradient>
+              </defs>
+              <circle cx="16" cy="12" r="4" fill="white" opacity="0.9"/>
+              <path d="M8 24c0-4.418 3.582-8 8-8s8 3.582 8 8" fill="white" opacity="0.9"/>
+            </svg>
+            <div class="online-dot"></div>
+          </div>
+          <div>
+            <p class="chat-name">Guru</p>
+            <p class="chat-status">Your AI wellness companion</p>
+          </div>
+        </div>
+        <button class="btn-icon-sm" id="btn-reset-chat" aria-label="Reset conversation">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <polyline points="23,4 23,10 17,10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="chat-messages-container">
+        <div class="chat-messages" id="chat-messages">
+          <div class="chat-msg assistant">
+            <div class="chat-bubble">
+              Hello! I'm Guru, your AI wellness companion. 🌿<br><br>
+              I'm here to listen and support you. How are you feeling today?
+            </div>
+            <span class="chat-time">Just now</span>
+          </div>
+        </div>
+        <div class="chat-typing" id="chat-typing" hidden>
+          <div class="typing-bubble">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-area">
+        <div class="chat-input-wrapper">
+          <textarea
+            id="chat-input"
+            class="chat-textarea"
+            placeholder="Share what's on your mind..."
+            rows="1"
+            maxlength="500"
+            aria-label="Message input"
+          ></textarea>
+          <button class="btn-send" id="btn-send-chat" aria-label="Send message">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- SETTINGS VIEW                           -->
+    <!-- ─────────────────────────────────────── -->
+    <div id="view-settings" class="app-view">
+      <div class="app-view-header">
+        <button class="btn-back" data-back aria-label="Back">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <polyline points="15,18 9,12 15,6"/>
+          </svg>
+        </button>
+        <h2>Settings</h2>
+        <div class="header-spacer"></div>
+      </div>
+
+      <div class="settings-container">
+        <div class="settings-profile">
+          <div class="settings-avatar">
+            <svg viewBox="0 0 60 60" fill="none">
+              <circle cx="30" cy="30" r="30" fill="url(#settingsGrad)"/>
+              <defs>
+                <linearGradient id="settingsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#7c3aed"/>
+                  <stop offset="100%" stop-color="#0ea5e9"/>
+                </linearGradient>
+              </defs>
+              <circle cx="30" cy="23" r="9" fill="white" opacity="0.9"/>
+              <path d="M10 52c0-11.046 8.954-20 20-20s20 8.954 20 20" fill="white" opacity="0.9"/>
+            </svg>
+          </div>
+          <div class="settings-profile-info">
+            <p class="settings-name" id="settings-user-name">Loading...</p>
+            <p class="settings-email" id="settings-user-email"></p>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">Audio</h3>
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <p class="settings-item-title">Background Sounds</p>
+              <p class="settings-item-sub">Play ambient audio during sessions</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-ambient" checked>
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <p class="settings-item-title">Voice Narration</p>
+              <p class="settings-item-sub">AI voice reads your meditations</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-voice" checked>
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <p class="settings-item-title">Breathing Cues</p>
+              <p class="settings-item-sub">Audible tones during breathing</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-breath-cues" checked>
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">Appearance</h3>
+          <div class="settings-item">
+            <div class="settings-item-info">
+              <p class="settings-item-title">Particle Background</p>
+              <p class="settings-item-sub">Animated star particles</p>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="setting-particles" checked>
+              <span class="toggle-track">
+                <span class="toggle-thumb"></span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="settings-section">
+          <h3 class="settings-section-title">Account</h3>
+          <button class="settings-action-btn danger" id="btn-logout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sign Out
+          </button>
+        </div>
+
+        <p class="settings-version">Pocket Guru AI · v1.0.0 MVP</p>
+      </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <!-- BOTTOM NAVIGATION                       -->
+    <!-- ─────────────────────────────────────── -->
+    <nav class="bottom-nav" id="bottom-nav" role="navigation" aria-label="Main navigation">
+      <button class="nav-btn active" data-view="home">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
+        </svg>
+        <span>Home</span>
+      </button>
+      <button class="nav-btn" data-view="meditation">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4.418 3.582-8 8-8s8 3.582 8 8"/>
+          <path d="M2 18c-1 0-2 .75-2 1.5M22 18c1 0 2 .75 2 1.5"/>
+        </svg>
+        <span>Meditate</span>
+      </button>
+      <button class="nav-btn" data-view="breathing">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="9" stroke-dasharray="3 2" opacity="0.5"/>
+        </svg>
+        <span>Breathe</span>
+      </button>
+      <button class="nav-btn" data-view="chat">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        <span>Talk</span>
+      </button>
+    </nav>
+
+  </div><!-- end #app-layout -->
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- AUDIO PERMISSION OVERLAY                        -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="audio-permission-overlay" class="overlay hidden">
+    <div class="overlay-card">
+      <div class="overlay-icon">🔊</div>
+      <h3>Enable Audio</h3>
+      <p>Pocket Guru uses soothing sounds and voice guidance to enhance your meditation experience.</p>
+      <button class="btn-primary btn-full" id="btn-enable-audio">Enable Audio</button>
+      <button class="btn-ghost btn-full" id="btn-skip-audio">Continue without audio</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════ -->
+  <!-- TOAST NOTIFICATIONS                             -->
+  <!-- ═══════════════════════════════════════════════ -->
+  <div id="toast" class="toast" role="alert" aria-live="polite"></div>
+
+  <!-- Scripts -->
+  <script src="/app/js/api.js"></script>
+  <script src="/app/js/audio.js"></script>
+  <script src="/app/js/breathing.js"></script>
+  <script src="/app/js/meditation.js"></script>
+  <script src="/app/js/app.js"></script>
+</body>
+</html>

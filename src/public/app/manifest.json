@@ -1,0 +1,46 @@
+{
+  "name": "Pocket Guru AI",
+  "short_name": "Pocket Guru",
+  "description": "Your AI-powered wellness companion for meditation, breathing exercises, and mental wellbeing.",
+  "start_url": "/app/",
+  "display": "standalone",
+  "background_color": "#0a0f1e",
+  "theme_color": "#0a0f1e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/android-chrome-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/app/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "lifestyle", "wellness"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Meditate",
+      "short_name": "Meditate",
+      "description": "Start a meditation session",
+      "url": "/app/?screen=meditation"
+    },
+    {
+      "name": "Breathe",
+      "short_name": "Breathe",
+      "description": "Start a breathing exercise",
+      "url": "/app/?screen=breathing"
+    }
+  ]
+}
