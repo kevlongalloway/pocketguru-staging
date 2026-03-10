@@ -5,16 +5,16 @@
     "keywords": ["framework", "laravel"],
     "license": "MIT",
     "require": {
-        "php": "^7.3|^8.1.4",
+        "php": "^8.2",
         "backpack/crud": "^6.1",
         "backpack/theme-tabler": "^1.0",
         "firebase/php-jwt": "^6.8",
         "google/cloud-text-to-speech": "^1.6",
         "guzzlehttp/guzzle": "^7.0.1",
-        "illuminate/contracts": "^10.0",
-        "laravel/framework": "^10.2",
-        "laravel/sanctum": "^3.2",
-        "laravel/tinker": "^2.5",
+        "illuminate/contracts": "^11.0",
+        "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.9",
         "tectalic/openai": "^1.4"
     },
     "require-dev": {
@@ -22,7 +22,7 @@
         "fakerphp/faker": "^1.9.1",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
+        "nunomaduro/collision": "^8.0",
         "phpunit/phpunit": "^10.0",
         "spatie/laravel-ignition": "^2.0"
     },
