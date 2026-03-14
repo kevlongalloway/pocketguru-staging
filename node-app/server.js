@@ -329,10 +329,23 @@ async function getGoogleAccessToken(credentials) {
       res => {
         let raw = '';
         res.on('data', c => raw += c);
-        res.on('end', () => { try { resolve(JSON.parse(raw).access_token); } catch(e) { reject(e); } });
+        res.on('end', () => {
+          try {
+            const parsed = JSON.parse(raw);
+            if (!parsed.access_token) {
+              console.error('[TTS] OAuth token exchange failed:', raw);
+              reject(new Error(`OAuth failed: ${raw}`));
+            } else {
+              resolve(parsed.access_token);
+            }
+          } catch(e) {
+            console.error('[TTS] OAuth response parse error:', e.message, 'raw:', raw);
+            reject(e);
+          }
+        });
       }
     );
-    req.on('error', reject);
+    req.on('error', (e) => { console.error('[TTS] OAuth request error:', e.message); reject(e); });
     req.write(body);
     req.end();
   });
@@ -350,11 +363,23 @@ app.post('/api/tts', async (req, res) => {
   if (!input) return res.status(422).json({ error: 'input is required.' });
 
   const credsJson = process.env.GOOGLE_TTS_CREDENTIALS;
-  if (!credsJson) return res.status(503).json({ error: 'TTS credentials not configured.' });
+  if (!credsJson) {
+    console.error('[TTS] GOOGLE_TTS_CREDENTIALS env var is not set');
+    return res.status(503).json({ error: 'TTS credentials not configured.' });
+  }
+
+  let credentials;
+  try {
+    credentials = JSON.parse(credsJson);
+    console.log('[TTS] Credentials parsed, client_email:', credentials.client_email);
+  } catch (e) {
+    console.error('[TTS] Failed to parse GOOGLE_TTS_CREDENTIALS JSON:', e.message);
+    return res.status(500).json({ error: 'TTS credentials invalid JSON.' });
+  }
 
   try {
-    const credentials  = JSON.parse(credsJson);
     const accessToken  = await getGoogleAccessToken(credentials);
+    console.log('[TTS] Access token obtained, calling synthesize...');
     const ttsBody = {
       input:       ssml ? { ssml: input } : { text: input },
       voice:       { languageCode, name: voiceName },
@@ -366,13 +391,17 @@ app.post('/api/tts', async (req, res) => {
       { 'Authorization': `Bearer ${accessToken}` },
       ttsBody
     );
-    if (!ttsData.audioContent) return res.status(500).json({ error: 'TTS failed.', detail: ttsData });
+    if (!ttsData.audioContent) {
+      console.error('[TTS] No audioContent in response:', JSON.stringify(ttsData));
+      return res.status(500).json({ error: 'TTS failed.', detail: ttsData });
+    }
+    console.log('[TTS] Success, sending audio');
     const audio = Buffer.from(ttsData.audioContent, 'base64');
     res.set({ 'Content-Type': 'audio/mpeg', 'Content-Disposition': 'inline; filename="audio.mp3"' });
     res.send(audio);
   } catch (err) {
-    console.error('TTS error:', err);
-    res.status(500).json({ error: 'TTS failed.' });
+    console.error('[TTS] Error:', err.message, err.stack);
+    res.status(500).json({ error: 'TTS failed.', detail: err.message });
   }
 });
 
