@@ -42,7 +42,10 @@ async function openaiChat(messages, maxTokens = 500) {
     { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` },
     { model: 'gpt-3.5-turbo', messages, max_tokens: maxTokens }
   );
-  if (data.error) throw new Error(`OpenAI API error: ${JSON.stringify(data.error)}`);
+  if (!data || !data.choices) {
+    console.error('OpenAI raw response:', JSON.stringify(data));
+    throw new Error('No choices in OpenAI response');
+  }
   return data;
 }
 
