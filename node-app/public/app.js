@@ -475,16 +475,23 @@ function escHtml(str) {
 }
 
 async function loadUser() {
-  const data = await GET('/api/user');
-  if (data?.id) S.user = data;
+  try {
+    const data = await GET('/api/user');
+    if (data?.id) S.user = data;
+    else { S.token = null; localStorage.removeItem('pg_token'); }
+  } catch {
+    S.token = null; localStorage.removeItem('pg_token');
+  }
 }
 
 async function checkQuestionnaire() {
-  const qs = await GET('/api/questions', true);
-  if (Array.isArray(qs) && qs.length > 0) {
-    const done = await GET('/api/questionaire-completed');
-    if (!done?.completed) { S.questions = qs; S.qStep = 0; S.qAnswers = {}; S.screen = 'questionnaire'; }
-  }
+  try {
+    const qs = await GET('/api/questions', true);
+    if (Array.isArray(qs) && qs.length > 0) {
+      const done = await GET('/api/questionaire-completed');
+      if (!done?.completed) { S.questions = qs; S.qStep = 0; S.qAnswers = {}; S.screen = 'questionnaire'; }
+    }
+  } catch { /* skip questionnaire on error */ }
 }
 
 function afterRender() {
@@ -507,10 +514,13 @@ async function init() {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   }
 
-  if (S.token) {
-    await loadUser();
-    if (!S.user) { S.token = null; localStorage.removeItem('pg_token'); }
-    else await checkQuestionnaire();
+  try {
+    if (S.token) {
+      await loadUser();
+      if (S.user) await checkQuestionnaire();
+    }
+  } catch {
+    S.token = null; localStorage.removeItem('pg_token');
   }
 
   render();
