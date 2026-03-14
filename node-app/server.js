@@ -4,6 +4,7 @@ const express     = require('express');
 const bcrypt      = require('bcryptjs');
 const crypto      = require('crypto');
 const https       = require('https');
+const path        = require('path');
 const rateLimit   = require('express-rate-limit');
 const db          = require('./db');
 
@@ -11,6 +12,9 @@ const app = express();
 app.set('trust proxy', 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve PWA static files
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -356,8 +360,24 @@ app.post('/api/tts', async (req, res) => {
   }
 });
 
-// ── Web routes ────────────────────────────────────────────────────────────────
+// ── Web / SPA catch-all ───────────────────────────────────────────────────────
 
+// Kept for backwards compat — POST /subscribe stores email to DB
+const subscribeLimiter = rateLimit({ windowMs: 60 * 1000, max: 5, standardHeaders: true, legacyHeaders: false });
+app.post('/subscribe', subscribeLimiter, (req, res) => {
+  const email = (req.body.email || '').trim().toLowerCase();
+  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    try { db.prepare('INSERT INTO emails (email) VALUES (?)').run(email); } catch (_) {}
+  }
+  res.json({ success: true });
+});
+
+// Serve index.html for all non-API GET routes (SPA routing)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// ── (removed) old WELCOME_HTML / SUBSCRIBED_HTML pages ────────────────────────
 const WELCOME_HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
