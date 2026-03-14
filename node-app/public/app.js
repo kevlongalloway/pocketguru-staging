@@ -219,29 +219,29 @@ function homeHTML() {
     </div>
     <div class="card-grid">
       <button class="feature-card" onclick="go('chat')">
-        <div class="icon" style="background:#fce7f3">💬</div>
+        <div class="icon" style="background:rgba(125,211,252,0.15)">💬</div>
         <h3>AI Chat</h3>
         <p>Talk to your wellness guide</p>
       </button>
       <button class="feature-card" onclick="go('meditate')">
-        <div class="icon" style="background:#f3e8ff">🧘</div>
+        <div class="icon" style="background:rgba(167,139,250,0.15)">🧘</div>
         <h3>Meditate</h3>
         <p>AI-guided meditation</p>
       </button>
       <button class="feature-card" onclick="go('breathe')">
-        <div class="icon" style="background:#e0f2fe">🌬️</div>
+        <div class="icon" style="background:rgba(56,189,248,0.15)">🌬️</div>
         <h3>Breathe</h3>
         <p>Breathing exercises</p>
       </button>
       <button class="feature-card" onclick="go('affirm')">
-        <div class="icon" style="background:#fef9c3">✨</div>
+        <div class="icon" style="background:rgba(250,204,21,0.12)">✨</div>
         <h3>Affirm</h3>
         <p>Daily affirmations</p>
       </button>
     </div>
-    <div class="card" style="background:linear-gradient(135deg,#fce7f3,#f3e8ff);border:none">
-      <p style="font-size:.8rem;font-weight:700;color:#db2777;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Quick tip</p>
-      <p style="font-size:.95rem;color:#4b5563;line-height:1.6">Try box breathing: inhale 4 counts, hold 4, exhale 4, hold 4. Repeat 4 times to reset your nervous system.</p>
+    <div class="card">
+      <p style="font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Quick tip</p>
+      <p style="font-size:.95rem;color:var(--muted);line-height:1.6">Try box breathing: inhale 4 counts, hold 4, exhale 4, hold 4. Repeat 4 times to reset your nervous system.</p>
     </div>`;
 }
 
