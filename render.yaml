@@ -4,7 +4,7 @@ services:
     runtime: docker
     dockerfilePath: ./Dockerfile.render
     dockerContext: .
-    plan: starter
+    plan: free
     healthCheckPath: /
     envVars:
       - key: APP_NAME
@@ -22,27 +22,7 @@ services:
       - key: LOG_LEVEL
         value: error
       - key: DB_CONNECTION
-        value: pgsql
-      - key: DB_HOST
-        fromDatabase:
-          name: pocketguru-db
-          property: host
-      - key: DB_PORT
-        fromDatabase:
-          name: pocketguru-db
-          property: port
-      - key: DB_DATABASE
-        fromDatabase:
-          name: pocketguru-db
-          property: database
-      - key: DB_USERNAME
-        fromDatabase:
-          name: pocketguru-db
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: pocketguru-db
-          property: password
+        value: sqlite
       - key: CACHE_DRIVER
         value: file
       - key: SESSION_DRIVER
@@ -51,8 +31,3 @@ services:
         value: sync
       - key: FILESYSTEM_DRIVER
         value: local
-databases:
-  - name: pocketguru-db
-    databaseName: pocketguru
-    user: pocketguru
-    plan: starter
