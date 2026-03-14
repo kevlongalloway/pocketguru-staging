@@ -1,6 +1,6 @@
 'use strict';
 
-const CACHE = 'pocketguru-v1';
+const CACHE = 'pocketguru-v2';
 const STATIC = ['/', '/app.js', '/style.css', '/manifest.json', '/icon-192.svg'];
 
 self.addEventListener('install', e => {
