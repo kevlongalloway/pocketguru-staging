@@ -3,6 +3,9 @@ set -e
 
 cd /var/www/html
 
+# Create SQLite database file if it doesn't exist
+touch /var/www/html/database/database.sqlite
+
 # Run database migrations
 php artisan migrate --force
 
