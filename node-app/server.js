@@ -37,10 +37,16 @@ function httpsPost(hostname, path, headers, body) {
 
 // OpenAI chat completions (used for both chat and text-generation features)
 async function openaiChat(messages, maxTokens = 500) {
-  return httpsPost('api.openai.com', '/v1/chat/completions',
+  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set');
+  const data = await httpsPost('api.openai.com', '/v1/chat/completions',
     { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` },
     { model: 'gpt-3.5-turbo', messages, max_tokens: maxTokens }
   );
+  if (!data || !data.choices) {
+    console.error('OpenAI raw response:', JSON.stringify(data));
+    throw new Error('No choices in OpenAI response');
+  }
+  return data;
 }
 
 // Generate a Sanctum-compatible opaque token: "id|plainToken"
