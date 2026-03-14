@@ -1,0 +1,68 @@
+services:
+  - type: web
+    name: pocketguru
+    runtime: docker
+    dockerfilePath: ./Dockerfile.render
+    dockerContext: .
+    plan: starter
+    healthCheckPath: /
+    envVars:
+      - key: APP_NAME
+        value: PocketGuru
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: false
+      - key: APP_KEY
+        generateValue: true
+      - key: APP_URL
+        value: https://pocketguru.onrender.com  # Update to your actual Render URL
+      - key: LOG_CHANNEL
+        value: stack
+      - key: LOG_LEVEL
+        value: error
+      - key: DB_CONNECTION
+        value: mysql
+      - key: DB_HOST
+        fromDatabase:
+          name: pocketguru-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: pocketguru-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: pocketguru-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: pocketguru-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: pocketguru-db
+          property: password
+      - key: CACHE_DRIVER
+        value: file
+      - key: SESSION_DRIVER
+        value: file
+      - key: QUEUE_CONNECTION
+        value: sync
+      - key: FILESYSTEM_DRIVER
+        value: local
+      # Set these manually in the Render dashboard after first deploy:
+      # OPENAI_API_KEY
+      # GOOGLE_CLIENT_ID
+      # GOOGLE_CLIENT_SECRET
+      # APPLE_CLIENT_ID
+      # APPLE_CLIENT_SECRET
+      # TWILIO_SID
+      # TWILIO_TOKEN
+      # TWILIO_FROM
+
+databases:
+  - name: pocketguru-db
+    databaseName: pocketguru
+    user: pocketguru
+    plan: starter

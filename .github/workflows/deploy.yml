@@ -1,27 +1,46 @@
-name: Deploy to DigitalOcean
+name: Deploy to Server
+
+# To retarget a new server (Rumble Cloud, DigitalOcean, etc.), just update
+# these 3 secrets in GitHub → Settings → Secrets and variables → Actions:
+#
+#   SSH_PRIVATE_KEY  — private key that can SSH into the server
+#   SSH_HOST         — server IP address
+#   SSH_USER         — SSH user (usually: root)
 
 on:
   push:
     branches:
-      - master  # Change to your defauly branch name
+      - master
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest  # You can choose an appropriate runner
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up SSH key
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan 24.199.103.78 >> ~/.ssh/known_hosts
+          ssh-keyscan "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Deploy to DigitalOcean
+      - name: Pull latest code on server
         run: |
-          ssh root@24.199.103.78 "cd ~/pocketguru-staging && git pull origin master"  # Adjust the directory and branch as needed
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "cd ~/pocketguru-staging && git pull origin master"
 
+      - name: Install packages & refresh caches
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            cd ~/pocketguru-staging
+            docker compose exec -T php composer install --no-dev --optimize-autoloader --quiet
+            docker compose exec -T php php artisan migrate --force
+            docker compose exec -T php php artisan config:cache
+            docker compose exec -T php php artisan route:cache
+            docker compose exec -T php php artisan view:cache
+            docker compose restart nginx
+          "
