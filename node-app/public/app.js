@@ -54,7 +54,7 @@ async function playTTS(text, btnId) {
     const blob = await res.blob();
     const url  = URL.createObjectURL(blob);
     const audio = new Audio(url);
-    audio.play();
+    await audio.play();
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = ICONS.play + ' Playing…';
