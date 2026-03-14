@@ -7,13 +7,18 @@ const S = {
   screen:   'home',
   chat:     [],
   medText:  null,
+  medSentences:    [],
+  medSessionActive: false,
+  medSessionIdx:    0,
+  medSessionTimer:  null,
   affText:  null,
   questions: [],
   qAnswers:  {},
   qStep:     0,
-  breathingActive: false,
+  breathingActive:   false,
   breathingPhaseIdx: 0,
-  breathingTimer: null,
+  breathingTimer:    null,
+  mood: null,
 };
 
 // ── SVG Icons ─────────────────────────────────────────────────────────────────
@@ -26,6 +31,7 @@ const ICONS = {
   send:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`,
   refresh:  `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>`,
   play:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`,
+  pause:    `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>`,
   logout:   `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>`,
   share:    `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>`,
 };
@@ -42,8 +48,6 @@ const POST = (p, b, s) => api('POST', p, b, s);
 const GET  = (p, s)    => api('GET',  p, undefined, s);
 
 // ── TTS helpers ───────────────────────────────────────────────────────────────
-
-// Wrap plain text in SSML for richer TTS quality
 function textToSSML(text) {
   const esc = text.replace(/&/g,'&amp;').replace(/'/g,'&apos;');
   const marked = esc
@@ -53,40 +57,10 @@ function textToSSML(text) {
   return `<speak><prosody rate="88%" pitch="-2st">${marked}</prosody></speak>`;
 }
 
-// Split text into sentences for timed reading
-function timedRead(text, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  // Split on sentence boundaries
-  const raw = text.replace(/\n+/g, ' ');
-  const sentences = raw.match(/[^.!?]+[.!?]+["']?/g) || [text];
-  let i = 0;
-
-  function step() {
-    const el = document.getElementById(containerId);
-    if (!el || i >= sentences.length) return;
-    el.innerHTML = sentences.map((s, idx) => {
-      const cls = idx < i ? 'timed-read' : idx === i ? 'timed-current' : 'timed-pending';
-      return `<span class="${cls}">${escHtml(s.trim())} </span>`;
-    }).join('');
-    // Scroll current sentence into view
-    const cur = el.querySelector('.timed-current');
-    if (cur) cur.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    const wpm = sentences[i].split(/\s+/).length;
-    i++;
-    setTimeout(step, Math.max(2000, wpm * 380));
-  }
-  step();
-}
-
-async function playTTS(text, btnId, displayId) {
+async function playTTS(text, btnId) {
   const btn = document.getElementById(btnId);
-  if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div> Loading…`; }
+  if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div>`; }
 
-  // Always start timed reading immediately — works with or without audio
-  if (displayId) timedRead(text, displayId);
-
-  // Try Google TTS with SSML
   try {
     const ssml = textToSSML(text);
     const res = await fetch('/api/tts', {
@@ -100,40 +74,35 @@ async function playTTS(text, btnId, displayId) {
     const audio = new Audio(url);
     await audio.play();
     if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = ICONS.play + ' Playing…';
-      audio.onended = () => { btn.innerHTML = ICONS.play + ' Play Audio'; URL.revokeObjectURL(url); };
+      btn.disabled = false; btn.innerHTML = ICONS.play + ' Playing…';
+      audio.onended = () => { btn.innerHTML = ICONS.play + ' Play'; URL.revokeObjectURL(url); };
     }
     return;
   } catch (_) {}
 
-  // Fallback: browser Web Speech API
   if (window.speechSynthesis) {
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
     const preferred = ['Google UK English Female', 'Karen', 'Samantha', 'Moira', 'Serena'];
     const pick = preferred.map(n => voices.find(v => v.name === n)).find(Boolean)
-              || voices.find(v => /female/i.test(v.name))
-              || voices[0];
+              || voices.find(v => /female/i.test(v.name)) || voices[0];
     if (pick) utter.voice = pick;
     utter.rate = 0.85; utter.pitch = 0.95; utter.volume = 1;
     if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = ICONS.play + ' Playing…';
-      utter.onend = () => { btn.innerHTML = ICONS.play + ' Play Audio'; };
+      btn.disabled = false; btn.innerHTML = ICONS.play + ' Playing…';
+      utter.onend = () => { btn.innerHTML = ICONS.play + ' Play'; };
     }
     window.speechSynthesis.speak(utter);
     return;
   }
-
-  // No audio available — timed reading is already running
-  if (btn) { btn.disabled = false; btn.innerHTML = '📖 Reading…'; }
+  if (btn) { btn.disabled = false; btn.innerHTML = ICONS.play + ' Play'; }
 }
 
 // ── Router ────────────────────────────────────────────────────────────────────
 function go(screen) {
   if (screen !== 'breathe') stopBreathing();
+  if (screen !== 'meditate') stopMedSession();
   S.screen = screen;
   render();
 }
@@ -181,7 +150,7 @@ function navHTML() {
   </nav>`;
 }
 
-// ── Auth screen ───────────────────────────────────────────────────────────────
+// ── Auth ──────────────────────────────────────────────────────────────────────
 let authTab = 'login';
 function authHTML() {
   return `<div class="auth-screen">
@@ -206,7 +175,6 @@ function authHTML() {
     </div>
   </div>`;
 }
-
 function switchTab(tab) { authTab = tab; document.getElementById('app').innerHTML = authHTML(); }
 
 async function doLogin() {
@@ -244,6 +212,14 @@ async function doLogout() {
 }
 
 // ── Home ──────────────────────────────────────────────────────────────────────
+const MOODS = [
+  { id: 'low',      emoji: '😔', label: 'Low',      route: 'chat',    msg: "I'm feeling low today and need some support." },
+  { id: 'stressed', emoji: '😤', label: 'Stressed',  route: 'breathe', msg: null },
+  { id: 'okay',     emoji: '😐', label: 'Okay',      route: 'meditate',msg: null },
+  { id: 'good',     emoji: '🙂', label: 'Good',      route: 'affirm',  msg: null },
+  { id: 'great',    emoji: '✨', label: 'Great',     route: 'chat',    msg: "I'm feeling great today! Help me make the most of this energy." },
+];
+
 function homeHTML() {
   const name = S.user?.name?.split(' ')[0] || 'there';
   const hour = new Date().getHours();
@@ -261,6 +237,16 @@ function homeHTML() {
       <h2>${greet}, ${name} 🙏</h2>
       <p>${tip}</p>
     </div>
+    <div class="mood-row">
+      <p class="mood-label">How are you feeling?</p>
+      <div class="mood-pills">
+        ${MOODS.map(m => `
+          <button class="mood-pill ${S.mood === m.id ? 'selected' : ''}" onclick="selectMood('${m.id}')">
+            <span class="emoji">${m.emoji}</span>
+            <span>${m.label}</span>
+          </button>`).join('')}
+      </div>
+    </div>
     <div class="card-grid">
       <button class="feature-card" onclick="go('chat')">
         <div class="icon" style="background:rgba(139,111,212,0.2)">💬</div>
@@ -270,7 +256,7 @@ function homeHTML() {
       <button class="feature-card" onclick="go('meditate')">
         <div class="icon" style="background:rgba(92,200,196,0.18)">🧘</div>
         <h3>Meditate</h3>
-        <p>AI-guided meditation</p>
+        <p>AI-guided session</p>
       </button>
       <button class="feature-card" onclick="go('breathe')">
         <div class="icon" style="background:rgba(92,200,196,0.15)">🌬️</div>
@@ -285,26 +271,69 @@ function homeHTML() {
     </div>
     <div class="card">
       <p style="font-size:.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Daily practice</p>
-      <p style="font-size:.95rem;color:var(--muted);line-height:1.65">Box breathing: inhale 4 counts, hold 4, exhale 4, hold 4. Four rounds resets your nervous system in under two minutes.</p>
+      <p style="font-size:.9rem;color:var(--muted);line-height:1.65">Box breathing: inhale 4 · hold 4 · exhale 4 · hold 4. Four rounds resets your nervous system in under two minutes.</p>
     </div>`;
 }
 
+function selectMood(id) {
+  S.mood = id;
+  // Re-render mood pills in place (no full re-render)
+  document.querySelectorAll('.mood-pill').forEach(el => el.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  // Route to appropriate screen after short visual pause
+  const m = MOODS.find(x => x.id === id);
+  setTimeout(() => {
+    if (m.msg) {
+      S.chat = [];
+      go('chat');
+      // After chat renders, auto-send the mood message
+      setTimeout(() => sendChatMsg(m.msg), 200);
+    } else {
+      go(m.route);
+    }
+  }, 350);
+}
+
 // ── Chat ──────────────────────────────────────────────────────────────────────
+const SUGGESTIONS = [
+  "I'm feeling anxious right now",
+  "Help me sleep better tonight",
+  "I need a confidence boost",
+  "Daily check-in",
+];
+
 function chatHTML() {
   const msgs = S.chat.filter(m => m.role !== 'system').map(m => `
     <div class="msg ${m.role === 'user' ? 'user' : 'ai'}">
       <div class="msg-bubble">${escHtml(m.content)}</div>
     </div>`).join('');
+
+  const empty = !msgs;
   return `
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
       <h2 style="font-size:1.2rem;font-weight:800">AI Chat</h2>
       <button class="btn btn-ghost" style="width:auto;padding:8px 14px;font-size:.8rem" onclick="resetChat()">Clear</button>
     </div>
-    <div class="chat-messages" id="chat-msgs">${msgs || `<div class="msg ai"><div class="msg-bubble">Hello 🙏 I'm PocketGuru, your AI wellness companion. How are you feeling today?</div></div>`}</div>
+    <div class="chat-messages" id="chat-msgs">
+      ${empty ? `
+        <div class="msg ai">
+          <div class="msg-bubble">Hello 🙏 I'm PocketGuru. How can I support you today?</div>
+        </div>
+        <div class="suggestion-chips">
+          ${SUGGESTIONS.map(s => `<button class="chip" onclick="sendChatMsg('${s.replace(/'/g,"\\'")}')">
+            ${escHtml(s)}</button>`).join('')}
+        </div>
+      ` : msgs}
+    </div>
     <div class="chat-input-bar">
       <input id="chat-in" type="text" placeholder="Share what's on your mind…" onkeydown="if(event.key==='Enter')sendChat()">
       <button class="chat-send" id="chat-send" onclick="sendChat()">${ICONS.send}</button>
     </div>`;
+}
+
+function sendChatMsg(text) {
+  const input = document.getElementById('chat-in');
+  if (input) { input.value = text; sendChat(); }
 }
 
 async function sendChat() {
@@ -344,38 +373,150 @@ async function resetChat() {
   document.getElementById('screen-content').innerHTML = chatHTML();
 }
 
-// ── Meditation ────────────────────────────────────────────────────────────────
+// ── Meditation — guided session mode ─────────────────────────────────────────
+function parseMedSentences(text) {
+  // Split into meaningful sentences, filtering blanks
+  return text
+    .replace(/\n+/g, ' ')
+    .match(/[^.!?]+[.!?]+["']?\s*/g)
+    ?.map(s => s.trim()).filter(Boolean) || [text];
+}
+
 function meditateHTML() {
-  const paragraphs = S.medText
-    ? S.medText.split(/\n\n+/).filter(Boolean).map(p => `<p class="med-para">${escHtml(p.trim())}</p>`).join('')
-    : '';
+  if (S.medSessionActive) return medSessionHTML();
+
+  if (!S.medText) {
+    return `
+      <div class="gen-loading">
+        <div style="font-size:3.5rem;margin-bottom:8px">🧘</div>
+        <h2 style="font-size:1.25rem;font-weight:800;margin-bottom:8px">Guided Meditation</h2>
+        <p style="color:var(--muted);font-size:.95rem;max-width:280px;line-height:1.6;margin-bottom:32px">
+          Your AI creates a personalized session just for you.
+        </p>
+        <button class="btn btn-primary" id="gen-med-btn" style="width:200px" onclick="generateMeditation()">
+          ${ICONS.play} Generate Session
+        </button>
+      </div>`;
+  }
+
+  const preview = S.medSentences[0] || '';
+  const count   = S.medSentences.length;
+  const mins    = Math.ceil(count * 4.5 / 60); // ~4.5s per sentence
+
   return `
-    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px">Guided Meditation</h2>
-    ${S.medText ? `
-      <div class="content-card" id="med-content">${paragraphs}</div>
-      <div style="display:flex;gap:10px">
-        <button class="btn btn-primary" id="play-med" style="flex:1"
-          onclick="playTTS(S.medText,'play-med','med-content')">${ICONS.play} Play & Read</button>
-        <button class="btn btn-ghost" onclick="generateMeditation()" style="flex:1">${ICONS.refresh} New</button>
+    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:4px">Guided Meditation</h2>
+    <p style="color:var(--muted);font-size:.82rem;margin-bottom:20px">~${mins} min · ${count} guided lines</p>
+
+    <div class="med-preview">
+      <div class="med-preview-orb"></div>
+      <p class="med-preview-line">"${escHtml(preview)}"</p>
+    </div>
+
+    <button class="btn btn-primary" style="margin-bottom:10px" onclick="startMedSession()">
+      ${ICONS.play} Begin Session
+    </button>
+    <button class="btn btn-ghost" onclick="generateMeditation()">
+      ${ICONS.refresh} New Session
+    </button>`;
+}
+
+function medSessionHTML() {
+  const sentences = S.medSentences;
+  const idx       = S.medSessionIdx;
+  const total     = sentences.length;
+  const pct       = Math.round((idx / total) * 100);
+  const text      = sentences[idx] || '';
+
+  const dots = Array.from({ length: Math.min(total, 12) }).map((_, i) => {
+    const pos = Math.floor((i / 12) * total);
+    const cls = pos < idx ? 'done' : pos === idx ? 'cur' : '';
+    return `<span class="sdot ${cls}"></span>`;
+  }).join('');
+
+  return `
+    <div class="med-session">
+      <div class="med-session-top">
+        <span style="font-size:.75rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em">Session in progress</span>
+        <button class="med-end-btn" onclick="stopMedSession()">✕ End</button>
       </div>
-    ` : `
-      <div class="card" style="text-align:center;padding:40px 24px">
-        <div style="font-size:3rem;margin-bottom:16px">🧘</div>
-        <p style="color:var(--muted);margin-bottom:24px">Generate a personalized guided meditation using AI</p>
-        <button class="btn btn-primary" id="gen-med-btn" onclick="generateMeditation()">Generate Meditation</button>
+
+      <div class="med-session-body">
+        <div class="med-session-line" id="med-line">${escHtml(text)}</div>
       </div>
-    `}`;
+
+      <div class="med-session-bottom">
+        <div class="sdots">${dots}</div>
+        <p style="font-size:.75rem;color:var(--muted);margin-top:8px">${idx + 1} / ${total}</p>
+        <div style="display:flex;gap:10px;margin-top:16px;justify-content:center">
+          <button class="btn btn-outline" style="width:auto;padding:10px 20px" onclick="medPrev()">‹ Back</button>
+          <button class="btn btn-primary" id="play-line" style="width:auto;padding:10px 20px"
+            onclick="playTTS(S.medSentences[S.medSessionIdx],'play-line')">${ICONS.play} Play</button>
+          <button class="btn btn-outline" style="width:auto;padding:10px 20px" onclick="medNext()">Next ›</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function startMedSession() {
+  S.medSessionActive = true;
+  S.medSessionIdx    = 0;
+  document.getElementById('screen-content').innerHTML = medSessionHTML();
+}
+
+function stopMedSession() {
+  if (S.medSessionTimer) clearTimeout(S.medSessionTimer);
+  S.medSessionActive = false;
+  S.medSessionIdx    = 0;
+  if (window.speechSynthesis) window.speechSynthesis.cancel();
+  document.getElementById('screen-content').innerHTML = meditateHTML();
+}
+
+function medNext() {
+  if (S.medSessionIdx < S.medSentences.length - 1) {
+    S.medSessionIdx++;
+    updateMedLine();
+  }
+}
+
+function medPrev() {
+  if (S.medSessionIdx > 0) {
+    S.medSessionIdx--;
+    updateMedLine();
+  }
+}
+
+function updateMedLine() {
+  // Fade transition
+  const el = document.getElementById('med-line');
+  if (el) {
+    el.style.opacity = '0'; el.style.transform = 'translateY(12px)';
+    setTimeout(() => {
+      document.getElementById('screen-content').innerHTML = medSessionHTML();
+    }, 220);
+  } else {
+    document.getElementById('screen-content').innerHTML = medSessionHTML();
+  }
 }
 
 async function generateMeditation() {
-  const btn = document.getElementById('gen-med-btn') || document.querySelector('#screen-content .btn-ghost');
-  if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div> Generating…`; }
+  stopMedSession();
+  document.getElementById('screen-content').innerHTML = `
+    <div class="gen-loading">
+      <div class="gen-orb"></div>
+      <p>Creating your session…</p>
+      <div class="gen-dots"><span></span><span></span><span></span></div>
+    </div>`;
   const data = await POST('/api/guided-meditation');
-  if (data?.response) { S.medText = data.response; document.getElementById('screen-content').innerHTML = meditateHTML(); }
-  else { if (btn) { btn.disabled = false; btn.textContent = 'Try Again'; } }
+  if (data?.response) {
+    S.medText      = data.response;
+    S.medSentences = parseMedSentences(data.response);
+    document.getElementById('screen-content').innerHTML = meditateHTML();
+  } else {
+    document.getElementById('screen-content').innerHTML = meditateHTML();
+  }
 }
 
-// ── Breathing — Apple Music lyrics style ──────────────────────────────────────
+// ── Breathing — Apple Music lyrics style ─────────────────────────────────────
 const PHASES = [
   { name: 'Inhale',  secs: 4, cls: 'grow',        lines: ['Breathe in…', 'Through your nose…', 'Fill your lungs…', 'All the way…'] },
   { name: 'Hold',    secs: 4, cls: 'hold-big',    lines: ['Hold…', 'Feel the fullness…', 'Be still…', 'Stay with it…'] },
@@ -385,7 +526,7 @@ const PHASES = [
 
 function breatheHTML() {
   const p   = PHASES[S.breathingPhaseIdx];
-  const cls = S.breathingActive ? p.cls : '';
+  const cls = S.breathingActive ? p.cls : 'idle';
   const line = S.breathingActive ? p.lines[0] : 'Press start to begin';
   return `
     <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:4px;text-align:center">Box Breathing</h2>
@@ -431,21 +572,16 @@ function runBreathPhase(phaseIdx, secsLeft) {
   if (!ring) { S.breathingActive = false; return; }
 
   const p       = PHASES[phaseIdx];
-  const lineIdx = p.secs - secsLeft; // 0 at start of phase, increments each second
+  const lineIdx = p.secs - secsLeft;
 
   if (secsLeft === p.secs) {
-    // Phase start — update ring and phase label
     ring.className = `breathing-ring ${p.cls}`;
     if (phase) phase.textContent = p.name;
     S.breathingPhaseIdx = phaseIdx;
   }
 
-  // Update countdown
   if (count) count.textContent = secsLeft > 0 ? secsLeft : '';
-
-  // Update lyric line
-  const line = p.lines[Math.min(lineIdx, p.lines.length - 1)];
-  updateBreathLine(line);
+  updateBreathLine(p.lines[Math.min(lineIdx, p.lines.length - 1)]);
 
   if (secsLeft > 0) {
     S.breathingTimer = setTimeout(() => runBreathPhase(phaseIdx, secsLeft - 1), 1000);
@@ -458,7 +594,9 @@ function runBreathPhase(phaseIdx, secsLeft) {
 function stopBreathing() {
   S.breathingActive = false;
   if (S.breathingTimer) clearTimeout(S.breathingTimer);
-  document.getElementById('screen-content').innerHTML = breatheHTML();
+  if (S.screen === 'breathe') {
+    document.getElementById('screen-content').innerHTML = breatheHTML();
+  }
 }
 
 // ── Affirmation ───────────────────────────────────────────────────────────────
@@ -466,28 +604,37 @@ function affirmHTML() {
   return `
     <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;text-align:center">Daily Affirmation</h2>
     ${S.affText ? `
-      <div class="affirmation-card" id="aff-content">"${escHtml(S.affText)}"</div>
-      <div style="display:flex;gap:10px;margin-bottom:12px">
+      <div class="affirmation-card">"${escHtml(S.affText)}"</div>
+      <div style="display:flex;gap:10px;margin-bottom:10px">
         <button class="btn btn-primary" id="play-aff" style="flex:1"
-          onclick="playTTS(S.affText,'play-aff','aff-content')">${ICONS.play} Play & Read</button>
+          onclick="playTTS(S.affText,'play-aff')">${ICONS.play} Play</button>
         <button class="btn btn-ghost" onclick="shareAffirmation()" style="flex:1">${ICONS.share} Share</button>
       </div>
-      <button class="btn btn-outline" onclick="getAffirmation()">${ICONS.refresh} New Affirmation</button>
+      <button class="btn btn-outline" onclick="getAffirmation()">${ICONS.refresh} New</button>
     ` : `
-      <div class="card" style="text-align:center;padding:40px 24px">
-        <div style="font-size:3rem;margin-bottom:16px">✨</div>
-        <p style="color:var(--muted);margin-bottom:24px">Get your personalized daily affirmation</p>
-        <button class="btn btn-primary" id="gen-aff-btn" onclick="getAffirmation()">Get Affirmation</button>
+      <div class="gen-loading" style="min-height:55vh">
+        <div style="font-size:3rem;margin-bottom:12px">✨</div>
+        <p style="color:var(--muted);font-size:.95rem;max-width:260px;line-height:1.6;margin-bottom:32px">
+          Get a personalized affirmation to ground your day.
+        </p>
+        <button class="btn btn-primary" id="gen-aff-btn" style="width:200px" onclick="getAffirmation()">
+          ✨ Get Affirmation
+        </button>
       </div>
     `}`;
 }
 
 async function getAffirmation() {
-  const btn = document.getElementById('gen-aff-btn');
-  if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div> Generating…`; }
+  const sc = document.getElementById('screen-content');
+  if (sc) sc.innerHTML = `
+    <div class="gen-loading" style="min-height:70vh">
+      <div class="gen-orb"></div>
+      <p>Finding your affirmation…</p>
+      <div class="gen-dots"><span></span><span></span><span></span></div>
+    </div>`;
   const data = await POST('/api/positive-affirmation');
-  if (data?.response) { S.affText = data.response; document.getElementById('screen-content').innerHTML = affirmHTML(); }
-  else { if (btn) { btn.disabled = false; btn.textContent = 'Try Again'; } }
+  if (data?.response) { S.affText = data.response; }
+  document.getElementById('screen-content').innerHTML = affirmHTML();
 }
 
 function shareAffirmation() {
@@ -548,18 +695,16 @@ async function qNext() {
   } else {
     const btn = document.getElementById('q-next-btn');
     if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div>`; }
-    const answers = Object.values(S.qAnswers);
-    await POST('/api/v1/answers', { answers });
-    S.screen = 'home';
-    render();
+    await POST('/api/v1/answers', { answers: Object.values(S.qAnswers) });
+    S.screen = 'home'; render();
   }
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function escHtml(str) {
   return String(str ?? '')
-    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;').replace(/\n/g, '<br>');
+    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;').replace(/\n/g,'<br>');
 }
 
 async function loadUser() {
@@ -567,9 +712,7 @@ async function loadUser() {
     const data = await GET('/api/user');
     if (data?.id) S.user = data;
     else { S.token = null; localStorage.removeItem('pg_token'); }
-  } catch {
-    S.token = null; localStorage.removeItem('pg_token');
-  }
+  } catch { S.token = null; localStorage.removeItem('pg_token'); }
 }
 
 async function checkQuestionnaire() {
@@ -579,7 +722,7 @@ async function checkQuestionnaire() {
       const done = await GET('/api/questionaire-completed');
       if (!done?.completed) { S.questions = qs; S.qStep = 0; S.qAnswers = {}; S.screen = 'questionnaire'; }
     }
-  } catch { /* skip questionnaire on error */ }
+  } catch {}
 }
 
 function afterRender() {
@@ -588,24 +731,16 @@ function afterRender() {
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }
   if (S.screen === 'breathe' && S.breathingActive) {
-    const p = PHASES[S.breathingPhaseIdx];
-    runBreathPhase(S.breathingPhaseIdx, p.secs);
+    runBreathPhase(S.breathingPhaseIdx, PHASES[S.breathingPhaseIdx].secs);
   }
 }
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 async function init() {
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
-  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
   try {
-    if (S.token) {
-      await loadUser();
-      if (S.user) await checkQuestionnaire();
-    }
-  } catch {
-    S.token = null; localStorage.removeItem('pg_token');
-  }
+    if (S.token) { await loadUser(); if (S.user) await checkQuestionnaire(); }
+  } catch { S.token = null; localStorage.removeItem('pg_token'); }
   render();
 }
 
