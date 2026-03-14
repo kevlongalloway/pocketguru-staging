@@ -1,7 +1,7 @@
 'use strict';
 
 const CACHE = 'pocketguru-v3';
-// Only cache truly static assets — NOT HTML or JS (those change on every deploy)
+// Only cache truly static assets - NOT HTML or JS (those change on every deploy)
 const STATIC = ['/style.css', '/manifest.json', '/icon-192.svg'];
 
 self.addEventListener('install', e => {
