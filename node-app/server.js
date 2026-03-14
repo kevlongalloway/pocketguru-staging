@@ -50,7 +50,7 @@ async function openaiChat(messages, maxTokens = 500) {
   if (!process.env.GROQ_API_KEY) throw new Error('OpenAI unavailable and GROQ_API_KEY is not set');
   const groqData = await httpsPost('api.groq.com', '/openai/v1/chat/completions',
     { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` },
-    { model: 'llama3-8b-8192', messages, max_tokens: maxTokens }
+    { model: 'llama-3.1-8b-instant', messages, max_tokens: maxTokens }
   );
   if (!groqData || !groqData.choices) {
     console.error('Groq raw response:', JSON.stringify(groqData));
