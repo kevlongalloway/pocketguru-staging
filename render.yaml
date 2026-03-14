@@ -29,5 +29,22 @@ services:
         value: sync
       - key: FILESYSTEM_DRIVER
         value: local
+      # --- Tokens you enter in Render dashboard ---
       - key: OPENAI_API_KEY
+        sync: false
+      - key: GOOGLE_TTS_CREDENTIALS
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: APPLE_CLIENT_ID
+        sync: false
+      - key: APPLE_CLIENT_SECRET
+        sync: false
+      - key: APPLE_TEAM_ID
+        sync: false
+      - key: APPLE_KEY_ID
+        sync: false
+      - key: APPLE_PRIVATE_KEY
         sync: false

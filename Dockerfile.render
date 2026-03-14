@@ -1,4 +1,4 @@
-## Stage 1: Build frontend assets (Node only, not in final image)
+# Stage 1: Build frontend assets (Node only, not in final image)
 FROM node:20-alpine AS node-builder
 
 WORKDIR /app
@@ -21,11 +21,13 @@ RUN docker-php-ext-install pdo pdo_sqlite mbstring zip
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+ENV COMPOSER_MEMORY_LIMIT=-1
+
 WORKDIR /var/www/html
 
 COPY ./src .
 
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
+RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts --ignore-platform-reqs
 
 # Copy compiled frontend assets from node-builder (keeps Node out of runtime)
 COPY --from=node-builder /app/public/js  ./public/js
