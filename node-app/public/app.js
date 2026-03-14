@@ -61,7 +61,28 @@ async function playTTS(text, btnId) {
       audio.onended = () => { btn.innerHTML = ICONS.play + ' Play Audio'; URL.revokeObjectURL(url); };
     }
   } catch {
-    if (btn) { btn.disabled = false; btn.innerHTML = '🔇 Audio unavailable'; }
+    // Fallback: browser Web Speech API (free, no API key needed)
+    if (!window.speechSynthesis) {
+      if (btn) { btn.disabled = false; btn.innerHTML = '🔇 Audio unavailable'; }
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utter = new SpeechSynthesisUtterance(text);
+    const voices = window.speechSynthesis.getVoices();
+    const preferred = ['Google UK English Female', 'Karen', 'Samantha', 'Moira', 'Serena'];
+    const pick = preferred.map(n => voices.find(v => v.name === n)).find(Boolean)
+              || voices.find(v => /female/i.test(v.name))
+              || voices[0];
+    if (pick) utter.voice = pick;
+    utter.rate  = 0.88;
+    utter.pitch = 0.95;
+    utter.volume = 1;
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = ICONS.play + ' Playing…';
+      utter.onend = () => { btn.innerHTML = ICONS.play + ' Play Audio'; };
+    }
+    window.speechSynthesis.speak(utter);
   }
 }
 
