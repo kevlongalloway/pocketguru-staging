@@ -184,7 +184,7 @@ function homeHTML() {
   const hour = new Date().getHours();
   const greet = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
   const tips = [
-    'Take a deep breath. You've got this.',
+    'Take a deep breath. You\'ve got this.',
     'Even 5 minutes of mindfulness can shift your day.',
     'Pause. Breathe. Be present.',
     'Your mind is a garden — tend it gently.',
