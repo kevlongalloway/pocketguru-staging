@@ -35,18 +35,28 @@ function httpsPost(hostname, path, headers, body) {
   });
 }
 
-// OpenAI chat completions (used for both chat and text-generation features)
+// OpenAI chat completions with Groq fallback
 async function openaiChat(messages, maxTokens = 500) {
-  if (!process.env.OPENAI_API_KEY) throw new Error('OPENAI_API_KEY is not set');
-  const data = await httpsPost('api.openai.com', '/v1/chat/completions',
-    { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` },
-    { model: 'gpt-3.5-turbo', messages, max_tokens: maxTokens }
-  );
-  if (!data || !data.choices) {
-    console.error('OpenAI raw response:', JSON.stringify(data));
-    throw new Error('No choices in OpenAI response');
+  // Try OpenAI first
+  if (process.env.OPENAI_API_KEY) {
+    const data = await httpsPost('api.openai.com', '/v1/chat/completions',
+      { 'Authorization': `Bearer ${process.env.OPENAI_API_KEY}` },
+      { model: 'gpt-3.5-turbo', messages, max_tokens: maxTokens }
+    );
+    if (data && data.choices) return data;
+    console.warn('OpenAI error, falling back to Groq:', JSON.stringify(data));
   }
-  return data;
+  // Fallback: Groq (free tier)
+  if (!process.env.GROQ_API_KEY) throw new Error('OpenAI unavailable and GROQ_API_KEY is not set');
+  const groqData = await httpsPost('api.groq.com', '/openai/v1/chat/completions',
+    { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` },
+    { model: 'llama3-8b-8192', messages, max_tokens: maxTokens }
+  );
+  if (!groqData || !groqData.choices) {
+    console.error('Groq raw response:', JSON.stringify(groqData));
+    throw new Error('No choices in Groq response');
+  }
+  return groqData;
 }
 
 // Generate a Sanctum-compatible opaque token: "id|plainToken"
