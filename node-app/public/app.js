@@ -18,16 +18,16 @@ const S = {
 
 // ── SVG Icons ─────────────────────────────────────────────────────────────────
 const ICONS = {
-  home: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`,
-  chat: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`,
-  meditate: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-5h2v2h-2zm0-8h2v6h-2z"/></svg>`,
-  breathe: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>`,
-  star: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
-  send: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`,
-  refresh: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>`,
-  play: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`,
-  logout: `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>`,
-  share: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>`,
+  home:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>`,
+  chat:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>`,
+  meditate: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="5" r="2"/><path d="M7 12c0-2.8 2.2-5 5-5s5 2.2 5 5"/><path d="M5 16c1.5-1.2 3.5-2 7-2s5.5.8 7 2"/><path d="M3 20h18"/></svg>`,
+  breathe:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>`,
+  star:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>`,
+  send:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>`,
+  refresh:  `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>`,
+  play:     `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>`,
+  logout:   `<svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></svg>`,
+  share:    `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>`,
 };
 
 // ── API ───────────────────────────────────────────────────────────────────────
@@ -41,16 +41,60 @@ async function api(method, path, body, skipAuth) {
 const POST = (p, b, s) => api('POST', p, b, s);
 const GET  = (p, s)    => api('GET',  p, undefined, s);
 
-async function playTTS(text, btnId) {
+// ── TTS helpers ───────────────────────────────────────────────────────────────
+
+// Wrap plain text in SSML for richer TTS quality
+function textToSSML(text) {
+  const esc = text.replace(/&/g,'&amp;').replace(/'/g,'&apos;');
+  const marked = esc
+    .replace(/([.!?])\s+/g, '$1<break time="1.8s"/> ')
+    .replace(/,\s+/g, ',<break time="0.6s"/> ')
+    .replace(/\n\n+/g, '<break time="2.5s"/>');
+  return `<speak><prosody rate="88%" pitch="-2st">${marked}</prosody></speak>`;
+}
+
+// Split text into sentences for timed reading
+function timedRead(text, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  // Split on sentence boundaries
+  const raw = text.replace(/\n+/g, ' ');
+  const sentences = raw.match(/[^.!?]+[.!?]+["']?/g) || [text];
+  let i = 0;
+
+  function step() {
+    const el = document.getElementById(containerId);
+    if (!el || i >= sentences.length) return;
+    el.innerHTML = sentences.map((s, idx) => {
+      const cls = idx < i ? 'timed-read' : idx === i ? 'timed-current' : 'timed-pending';
+      return `<span class="${cls}">${escHtml(s.trim())} </span>`;
+    }).join('');
+    // Scroll current sentence into view
+    const cur = el.querySelector('.timed-current');
+    if (cur) cur.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const wpm = sentences[i].split(/\s+/).length;
+    i++;
+    setTimeout(step, Math.max(2000, wpm * 380));
+  }
+  step();
+}
+
+async function playTTS(text, btnId, displayId) {
   const btn = document.getElementById(btnId);
-  if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div>`; }
+  if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div> Loading…`; }
+
+  // Always start timed reading immediately — works with or without audio
+  if (displayId) timedRead(text, displayId);
+
+  // Try Google TTS with SSML
   try {
+    const ssml = textToSSML(text);
     const res = await fetch('/api/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ input: text, voiceName: 'en-US-Standard-I', language_code: 'en-US' }),
+      body: JSON.stringify({ input: ssml, ssml: true, voiceName: 'en-US-Standard-I', language_code: 'en-US' }),
     });
-    if (!res.ok) throw new Error('unavailable');
+    if (!res.ok) throw new Error('tts-unavailable');
     const blob = await res.blob();
     const url  = URL.createObjectURL(blob);
     const audio = new Audio(url);
@@ -60,12 +104,11 @@ async function playTTS(text, btnId) {
       btn.innerHTML = ICONS.play + ' Playing…';
       audio.onended = () => { btn.innerHTML = ICONS.play + ' Play Audio'; URL.revokeObjectURL(url); };
     }
-  } catch {
-    // Fallback: browser Web Speech API (free, no API key needed)
-    if (!window.speechSynthesis) {
-      if (btn) { btn.disabled = false; btn.innerHTML = '🔇 Audio unavailable'; }
-      return;
-    }
+    return;
+  } catch (_) {}
+
+  // Fallback: browser Web Speech API
+  if (window.speechSynthesis) {
     window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(text);
     const voices = window.speechSynthesis.getVoices();
@@ -74,21 +117,22 @@ async function playTTS(text, btnId) {
               || voices.find(v => /female/i.test(v.name))
               || voices[0];
     if (pick) utter.voice = pick;
-    utter.rate  = 0.88;
-    utter.pitch = 0.95;
-    utter.volume = 1;
+    utter.rate = 0.85; utter.pitch = 0.95; utter.volume = 1;
     if (btn) {
       btn.disabled = false;
       btn.innerHTML = ICONS.play + ' Playing…';
       utter.onend = () => { btn.innerHTML = ICONS.play + ' Play Audio'; };
     }
     window.speechSynthesis.speak(utter);
+    return;
   }
+
+  // No audio available — timed reading is already running
+  if (btn) { btn.disabled = false; btn.innerHTML = '📖 Reading…'; }
 }
 
 // ── Router ────────────────────────────────────────────────────────────────────
 function go(screen) {
-  // Stop breathing if navigating away
   if (screen !== 'breathe') stopBreathing();
   S.screen = screen;
   render();
@@ -100,7 +144,7 @@ function render() {
   app.innerHTML = `
     <div class="app-shell">
       <header class="header">
-        <h1>🧘 PocketGuru</h1>
+        <h1><span class="app-title">PocketGuru</span></h1>
         <button onclick="doLogout()">${ICONS.logout} Logout</button>
       </header>
       <div class="screen" id="screen-content">${screenHTML()}</div>
@@ -111,24 +155,24 @@ function render() {
 
 function screenHTML() {
   switch (S.screen) {
-    case 'home':      return homeHTML();
-    case 'chat':      return chatHTML();
-    case 'meditate':  return meditateHTML();
-    case 'breathe':   return breatheHTML();
-    case 'affirm':    return affirmHTML();
+    case 'home':          return homeHTML();
+    case 'chat':          return chatHTML();
+    case 'meditate':      return meditateHTML();
+    case 'breathe':       return breatheHTML();
+    case 'affirm':        return affirmHTML();
     case 'questionnaire': return questionnaireHTML();
-    default:          return homeHTML();
+    default:              return homeHTML();
   }
 }
 
 // ── Nav ───────────────────────────────────────────────────────────────────────
 function navHTML() {
   const items = [
-    { id: 'home',    icon: ICONS.home,    label: 'Home' },
-    { id: 'chat',    icon: ICONS.chat,    label: 'Chat' },
-    { id: 'meditate',icon: ICONS.meditate,label: 'Meditate' },
-    { id: 'breathe', icon: ICONS.breathe, label: 'Breathe' },
-    { id: 'affirm',  icon: ICONS.star,    label: 'Affirm' },
+    { id: 'home',     icon: ICONS.home,     label: 'Home' },
+    { id: 'chat',     icon: ICONS.chat,     label: 'Chat' },
+    { id: 'meditate', icon: ICONS.meditate, label: 'Meditate' },
+    { id: 'breathe',  icon: ICONS.breathe,  label: 'Breathe' },
+    { id: 'affirm',   icon: ICONS.star,     label: 'Affirm' },
   ];
   return `<nav class="bottom-nav">${items.map(i => `
     <button class="nav-item ${S.screen === i.id ? 'active' : ''}" onclick="go('${i.id}')">
@@ -214,24 +258,24 @@ function homeHTML() {
   const tip = tips[new Date().getDate() % tips.length];
   return `
     <div class="greeting">
-      <h2>${greet}, ${name}! 👋</h2>
+      <h2>${greet}, ${name} 🙏</h2>
       <p>${tip}</p>
     </div>
     <div class="card-grid">
       <button class="feature-card" onclick="go('chat')">
-        <div class="icon" style="background:rgba(125,211,252,0.15)">💬</div>
+        <div class="icon" style="background:rgba(139,111,212,0.2)">💬</div>
         <h3>AI Chat</h3>
         <p>Talk to your wellness guide</p>
       </button>
       <button class="feature-card" onclick="go('meditate')">
-        <div class="icon" style="background:rgba(167,139,250,0.15)">🧘</div>
+        <div class="icon" style="background:rgba(92,200,196,0.18)">🧘</div>
         <h3>Meditate</h3>
         <p>AI-guided meditation</p>
       </button>
       <button class="feature-card" onclick="go('breathe')">
-        <div class="icon" style="background:rgba(56,189,248,0.15)">🌬️</div>
+        <div class="icon" style="background:rgba(92,200,196,0.15)">🌬️</div>
         <h3>Breathe</h3>
-        <p>Breathing exercises</p>
+        <p>Box breathing exercise</p>
       </button>
       <button class="feature-card" onclick="go('affirm')">
         <div class="icon" style="background:rgba(250,204,21,0.12)">✨</div>
@@ -240,8 +284,8 @@ function homeHTML() {
       </button>
     </div>
     <div class="card">
-      <p style="font-size:.8rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px">Quick tip</p>
-      <p style="font-size:.95rem;color:var(--muted);line-height:1.6">Try box breathing: inhale 4 counts, hold 4, exhale 4, hold 4. Repeat 4 times to reset your nervous system.</p>
+      <p style="font-size:.75rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Daily practice</p>
+      <p style="font-size:.95rem;color:var(--muted);line-height:1.65">Box breathing: inhale 4 counts, hold 4, exhale 4, hold 4. Four rounds resets your nervous system in under two minutes.</p>
     </div>`;
 }
 
@@ -256,7 +300,7 @@ function chatHTML() {
       <h2 style="font-size:1.2rem;font-weight:800">AI Chat</h2>
       <button class="btn btn-ghost" style="width:auto;padding:8px 14px;font-size:.8rem" onclick="resetChat()">Clear</button>
     </div>
-    <div class="chat-messages" id="chat-msgs">${msgs || `<div class="msg ai"><div class="msg-bubble">Hi! I'm PocketGuru, your AI wellness companion. How are you feeling today? 🌸</div></div>`}</div>
+    <div class="chat-messages" id="chat-msgs">${msgs || `<div class="msg ai"><div class="msg-bubble">Hello 🙏 I'm PocketGuru, your AI wellness companion. How are you feeling today?</div></div>`}</div>
     <div class="chat-input-bar">
       <input id="chat-in" type="text" placeholder="Share what's on your mind…" onkeydown="if(event.key==='Enter')sendChat()">
       <button class="chat-send" id="chat-send" onclick="sendChat()">${ICONS.send}</button>
@@ -302,12 +346,16 @@ async function resetChat() {
 
 // ── Meditation ────────────────────────────────────────────────────────────────
 function meditateHTML() {
+  const paragraphs = S.medText
+    ? S.medText.split(/\n\n+/).filter(Boolean).map(p => `<p class="med-para">${escHtml(p.trim())}</p>`).join('')
+    : '';
   return `
-    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px">🧘 Guided Meditation</h2>
+    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px">Guided Meditation</h2>
     ${S.medText ? `
-      <div class="content-card">${escHtml(S.medText)}</div>
+      <div class="content-card" id="med-content">${paragraphs}</div>
       <div style="display:flex;gap:10px">
-        <button class="btn btn-primary" id="play-med" onclick="playTTS(S.medText,'play-med')" style="flex:1">${ICONS.play} Play Audio</button>
+        <button class="btn btn-primary" id="play-med" style="flex:1"
+          onclick="playTTS(S.medText,'play-med','med-content')">${ICONS.play} Play & Read</button>
         <button class="btn btn-ghost" onclick="generateMeditation()" style="flex:1">${ICONS.refresh} New</button>
       </div>
     ` : `
@@ -320,38 +368,52 @@ function meditateHTML() {
 }
 
 async function generateMeditation() {
-  const btn = document.getElementById('gen-med-btn') || document.querySelector('.btn-ghost');
+  const btn = document.getElementById('gen-med-btn') || document.querySelector('#screen-content .btn-ghost');
   if (btn) { btn.disabled = true; btn.innerHTML = `<div class="spinner"></div> Generating…`; }
   const data = await POST('/api/guided-meditation');
   if (data?.response) { S.medText = data.response; document.getElementById('screen-content').innerHTML = meditateHTML(); }
   else { if (btn) { btn.disabled = false; btn.textContent = 'Try Again'; } }
 }
 
-// ── Breathing ─────────────────────────────────────────────────────────────────
+// ── Breathing — Apple Music lyrics style ──────────────────────────────────────
 const PHASES = [
-  { name: 'Inhale',    secs: 4, cls: 'grow',       color: '#f9a8d4' },
-  { name: 'Hold',      secs: 4, cls: 'hold-big',   color: '#e879f9' },
-  { name: 'Exhale',    secs: 4, cls: 'shrink',     color: '#a78bfa' },
-  { name: 'Hold',      secs: 4, cls: 'hold-small', color: '#818cf8' },
+  { name: 'Inhale',  secs: 4, cls: 'grow',        lines: ['Breathe in…', 'Through your nose…', 'Fill your lungs…', 'All the way…'] },
+  { name: 'Hold',    secs: 4, cls: 'hold-big',    lines: ['Hold…', 'Feel the fullness…', 'Be still…', 'Stay with it…'] },
+  { name: 'Exhale',  secs: 4, cls: 'shrink',      lines: ['Breathe out…', 'Through your mouth…', 'Let it all go…', 'Release fully…'] },
+  { name: 'Hold',    secs: 4, cls: 'hold-small',  lines: ['Rest here…', 'Empty and free…', 'Feel the quiet…', 'Almost time…'] },
 ];
 
 function breatheHTML() {
+  const p   = PHASES[S.breathingPhaseIdx];
+  const cls = S.breathingActive ? p.cls : '';
+  const line = S.breathingActive ? p.lines[0] : 'Press start to begin';
   return `
-    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:8px;text-align:center">🌬️ Box Breathing</h2>
-    <p style="text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:24px">4-4-4-4 — inhale, hold, exhale, hold</p>
+    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:4px;text-align:center">Box Breathing</h2>
+    <p style="text-align:center;color:var(--muted);font-size:.82rem;margin-bottom:20px">4 · 4 · 4 · 4 — inhale · hold · exhale · hold</p>
     <div class="breathing-center">
-      <div class="breathing-ring" id="b-ring">
-        <div class="breathing-phase" id="b-phase">${S.breathingActive ? PHASES[S.breathingPhaseIdx].name : 'Ready'}</div>
-        <div class="breathing-count" id="b-count">${S.breathingActive ? '' : '4'}</div>
+      <div class="breathing-ring ${cls}" id="b-ring">
+        <div class="breathing-phase" id="b-phase">${S.breathingActive ? p.name : ''}</div>
+        <div class="breathing-count" id="b-count">${S.breathingActive ? p.secs : ''}</div>
       </div>
-      <div style="text-align:center">
-        <p class="breathing-label" id="b-label">${S.breathingActive ? 'Breathe with the circle' : 'Press start to begin'}</p>
-        <p class="breathing-sub">Box breathing calms your nervous system</p>
+      <div class="breath-line-wrap">
+        <div class="breath-main-line" id="b-line">${escHtml(line)}</div>
       </div>
-      <button class="btn ${S.breathingActive ? 'btn-outline' : 'btn-primary'}" style="width:160px" onclick="${S.breathingActive ? 'stopBreathing()' : 'startBreathing()'}">
+      <button class="btn ${S.breathingActive ? 'btn-outline' : 'btn-primary'}" style="width:160px"
+        onclick="${S.breathingActive ? 'stopBreathing()' : 'startBreathing()'}">
         ${S.breathingActive ? '⏹ Stop' : '▶ Start'}
       </button>
     </div>`;
+}
+
+function updateBreathLine(text) {
+  const el = document.getElementById('b-line');
+  if (!el) return;
+  el.classList.add('fade');
+  setTimeout(() => {
+    if (!el.isConnected) return;
+    el.textContent = text;
+    el.classList.remove('fade');
+  }, 320);
 }
 
 function startBreathing() {
@@ -366,26 +428,30 @@ function runBreathPhase(phaseIdx, secsLeft) {
   const ring  = document.getElementById('b-ring');
   const phase = document.getElementById('b-phase');
   const count = document.getElementById('b-count');
-  const label = document.getElementById('b-label');
   if (!ring) { S.breathingActive = false; return; }
 
-  const p = PHASES[phaseIdx];
+  const p       = PHASES[phaseIdx];
+  const lineIdx = p.secs - secsLeft; // 0 at start of phase, increments each second
 
   if (secsLeft === p.secs) {
-    // New phase starting
+    // Phase start — update ring and phase label
     ring.className = `breathing-ring ${p.cls}`;
     if (phase) phase.textContent = p.name;
-    if (label) label.textContent = 'Breathe with the circle';
     S.breathingPhaseIdx = phaseIdx;
   }
 
-  if (count) count.textContent = secsLeft;
+  // Update countdown
+  if (count) count.textContent = secsLeft > 0 ? secsLeft : '';
+
+  // Update lyric line
+  const line = p.lines[Math.min(lineIdx, p.lines.length - 1)];
+  updateBreathLine(line);
 
   if (secsLeft > 0) {
     S.breathingTimer = setTimeout(() => runBreathPhase(phaseIdx, secsLeft - 1), 1000);
   } else {
     const next = (phaseIdx + 1) % PHASES.length;
-    S.breathingTimer = setTimeout(() => runBreathPhase(next, PHASES[next].secs), 100);
+    S.breathingTimer = setTimeout(() => runBreathPhase(next, PHASES[next].secs), 80);
   }
 }
 
@@ -398,11 +464,12 @@ function stopBreathing() {
 // ── Affirmation ───────────────────────────────────────────────────────────────
 function affirmHTML() {
   return `
-    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;text-align:center">✨ Daily Affirmation</h2>
+    <h2 style="font-size:1.2rem;font-weight:800;margin-bottom:16px;text-align:center">Daily Affirmation</h2>
     ${S.affText ? `
-      <div class="affirmation-card">"${escHtml(S.affText)}"</div>
+      <div class="affirmation-card" id="aff-content">"${escHtml(S.affText)}"</div>
       <div style="display:flex;gap:10px;margin-bottom:12px">
-        <button class="btn btn-primary" id="play-aff" onclick="playTTS(S.affText,'play-aff')" style="flex:1">${ICONS.play} Listen</button>
+        <button class="btn btn-primary" id="play-aff" style="flex:1"
+          onclick="playTTS(S.affText,'play-aff','aff-content')">${ICONS.play} Play & Read</button>
         <button class="btn btn-ghost" onclick="shareAffirmation()" style="flex:1">${ICONS.share} Share</button>
       </div>
       <button class="btn btn-outline" onclick="getAffirmation()">${ICONS.refresh} New Affirmation</button>
@@ -428,7 +495,7 @@ function shareAffirmation() {
   if (navigator.share) {
     navigator.share({ title: 'PocketGuruAI', text: `"${S.affText}" — PocketGuruAI` }).catch(() => {});
   } else {
-    navigator.clipboard?.writeText(S.affText).then(() => alert('Copied to clipboard!')).catch(() => {});
+    navigator.clipboard?.writeText(S.affText).then(() => alert('Copied!')).catch(() => {});
   }
 }
 
@@ -449,7 +516,7 @@ function questionnaireHTML() {
             onclick="selectOption(${q.id}, ${o.id})">${escHtml(o.option)}</button>`).join('')}
         </div>
       ` : `
-        <textarea id="open-ans" class="form-group" style="width:100%;padding:12px;border:2px solid var(--border);border-radius:12px;font-family:inherit;font-size:1rem;resize:vertical;min-height:100px;outline:none"
+        <textarea id="open-ans" class="form-group" style="width:100%;padding:12px;border:1px solid var(--glass-border);border-radius:12px;font-family:inherit;font-size:1rem;resize:vertical;min-height:100px;outline:none;background:rgba(255,255,255,0.06);color:var(--text)"
           placeholder="Type your answer…">${S.qAnswers[q.id]?.content || ''}</textarea>
       `}
     </div>
@@ -516,12 +583,10 @@ async function checkQuestionnaire() {
 }
 
 function afterRender() {
-  // Scroll chat to bottom
   if (S.screen === 'chat') {
     const msgs = document.getElementById('chat-msgs');
     if (msgs) msgs.scrollTop = msgs.scrollHeight;
   }
-  // Resume breathing animation if active (re-render case)
   if (S.screen === 'breathe' && S.breathingActive) {
     const p = PHASES[S.breathingPhaseIdx];
     runBreathPhase(S.breathingPhaseIdx, p.secs);
@@ -530,11 +595,9 @@ function afterRender() {
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 async function init() {
-  // Register service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/sw.js').catch(() => {});
   }
-
   try {
     if (S.token) {
       await loadUser();
@@ -543,7 +606,6 @@ async function init() {
   } catch {
     S.token = null; localStorage.removeItem('pg_token');
   }
-
   render();
 }
 

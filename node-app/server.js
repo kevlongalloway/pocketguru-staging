@@ -211,7 +211,7 @@ async function textCompletion(serviceId, fallbackPrompt) {
 // POST /api/guided-meditation
 app.post('/api/guided-meditation', auth, async (req, res) => {
   try {
-    const response = await textCompletion(2, 'Guide the user through a short calming meditation.');
+    const response = await textCompletion(2, `Write a 5-paragraph guided meditation script. Use second person, present tense. Guide through: settling the body, breath awareness, body scan, peaceful visualization, and gentle return. Separate each paragraph with a blank line. Calm, unhurried tone. No titles or headers.`);
     res.json({ response });
   } catch (err) {
     console.error('OpenAI error:', err);
@@ -233,7 +233,7 @@ app.post('/api/breathing-exercise', auth, async (req, res) => {
 // POST /api/positive-affirmation
 app.post('/api/positive-affirmation', auth, async (req, res) => {
   try {
-    const data = await openaiChat([{ role: 'user', content: 'Provide the user with a positive affirmation.' }], 200);
+    const data = await openaiChat([{ role: 'user', content: `Write one powerful personal affirmation (2-3 sentences). Present tense, first person. Make it warm, grounding, and specific to mental wellness and self-worth. No quotes, no explanation, just the affirmation itself.` }], 200);
     res.json({ response: data.choices[0].message.content });
   } catch (err) {
     console.error('OpenAI error:', err);
