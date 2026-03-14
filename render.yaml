@@ -16,7 +16,7 @@ services:
       - key: APP_KEY
         generateValue: true
       - key: APP_URL
-        value: https://pocketguru.onrender.com  # Update to your actual Render URL
+        sync: false
       - key: LOG_CHANNEL
         value: stack
       - key: LOG_LEVEL
@@ -51,18 +51,9 @@ services:
         value: sync
       - key: FILESYSTEM_DRIVER
         value: local
-      # Set these manually in the Render dashboard after first deploy:
-      # OPENAI_API_KEY
-      # GOOGLE_CLIENT_ID
-      # GOOGLE_CLIENT_SECRET
-      # APPLE_CLIENT_ID
-      # APPLE_CLIENT_SECRET
-      # TWILIO_SID
-      # TWILIO_TOKEN
-      # TWILIO_FROM
-
 databases:
   - name: pocketguru-db
     databaseName: pocketguru
     user: pocketguru
     plan: starter
+    type: mysql
