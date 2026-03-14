@@ -7,28 +7,10 @@ services:
     plan: free
     healthCheckPath: /
     envVars:
-      - key: APP_NAME
-        value: PocketGuru
-      - key: APP_ENV
+      - key: NODE_ENV
         value: production
-      - key: APP_DEBUG
-        value: false
-      - key: APP_KEY
-        generateValue: true
-      - key: LOG_CHANNEL
-        value: stack
-      - key: LOG_LEVEL
-        value: error
-      - key: DB_CONNECTION
-        value: sqlite
-      - key: CACHE_DRIVER
-        value: file
-      - key: SESSION_DRIVER
-        value: file
-      - key: QUEUE_CONNECTION
-        value: sync
-      - key: FILESYSTEM_DRIVER
-        value: local
+      - key: PORT
+        value: 3000
       # --- Tokens you enter in Render dashboard ---
       - key: OPENAI_API_KEY
         sync: false
