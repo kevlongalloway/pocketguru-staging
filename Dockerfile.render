@@ -31,11 +31,11 @@ COPY ./src .
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Install Node dependencies and build frontend assets
-RUN npm ci && npm run production && rm -rf node_modules
+RUN npm install && npm run production && rm -rf node_modules
 
 # Set file permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
-    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache \
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database \
     && chmod -R 777 /var/www/html/storage/logs /var/www/html/storage/framework
 
 # Copy nginx config
