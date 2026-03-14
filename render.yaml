@@ -22,7 +22,7 @@ services:
       - key: LOG_LEVEL
         value: error
       - key: DB_CONNECTION
-        value: mysql
+        value: pgsql
       - key: DB_HOST
         fromDatabase:
           name: pocketguru-db
@@ -56,4 +56,3 @@ databases:
     databaseName: pocketguru
     user: pocketguru
     plan: starter
-    type: mysql
